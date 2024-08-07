@@ -101,8 +101,9 @@
     <div class="main-content" id="main-content">
         <span class="menu-btn" id="menu-btn">&#9776;</span>
         <h2>Мессенджер</h2>
-        <ul class="chat-list">
-            <li>Чат 1</li>
+        <ul th:each="chat : ${chats}" class="chat-list">
+            <li th:text="${chat.chatName}" >Чат 1</li>
+			
         </ul>
     </div>
     <script>

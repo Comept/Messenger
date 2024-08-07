@@ -1,0 +1,6 @@
+spring.application.name : Messenger
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/messenger
+    username: postgres
+    password: postgres
