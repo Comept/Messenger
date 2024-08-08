@@ -10,17 +10,13 @@ import org.springframework.stereotype.Repository;
 
 
 
-@Component
-public class UserDaoImpl {
+@Repository
+public class UserRepo {
 
 	private final UserDao userdao;
 
-	public UserDaoImpl(@Lazy UserDao userdao) {
+	public UserRepo(@Lazy UserDao userdao) {
 		super();
 		this.userdao = userdao;
-	}
-	public long saveNewUser(User user) {
-		userdao.save(user);
-		return 100;	
 	}
 }

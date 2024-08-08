@@ -20,7 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 import pet.project.Messenger.entity.Chats;
 import pet.project.Messenger.entity.User;
 import pet.project.Messenger.repository.dao.UserDao;
-import pet.project.Messenger.repository.dao.jdbc.UserDaoImpl;
+import pet.project.Messenger.repository.dao.jdbc.UserRepo;
 
 @Slf4j
 @RequestMapping("/")
@@ -33,8 +33,6 @@ public class controller {
 	}
 	@GetMapping 
 	public String home() {
-		User user = new User("tgeetg","wqeeed","qwssd");
-		userDaoImpl.save(user);
 		return "messenger.html"; 
 	}
 	@ModelAttribute
