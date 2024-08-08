@@ -11,12 +11,10 @@ import org.springframework.stereotype.Repository;
 
 
 @Repository
-public class UserRepo {
-
-	private final UserDao userdao;
-
-	public UserRepo(@Lazy UserDao userdao) {
-		super();
-		this.userdao = userdao;
+public class UserRepo implements UserDao{
+	
+	public User findjjhjj(String name) {
+		return userdao.readByUsername(name).getFirst();
 	}
+	
 }

@@ -2,14 +2,14 @@ package pet.project.Messenger.entity;
 
 import java.sql.Date;
 
-import org.springframework.data.relational.core.mapping.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 
+@Entity
 public class Contacts {
-	@Column("user_id")
+	@Id
     private long userId;
-	@Column("contact_id")
     private long contactId;
-	@Column("created_at")
     private Date createdAt;
 
     public Contacts() {

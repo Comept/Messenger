@@ -2,23 +2,21 @@ package pet.project.Messenger.entity;
 
 import java.sql.Date;
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.relational.core.mapping.Column;
-import org.springframework.data.relational.core.mapping.Table;
-
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.Data;
 
-@Data
-@Table("users")
+
+@Entity
+@Table(name="users")
 public class User {
 	@Id
-	@Column("user_id")
-    private Long userId;
+    private Long user_Id;
     private String username;
-    @Column("password_hash")
-    private String password;
+    private String password_hash;
     private String email;
-    @Column("created_at")
     private Date createdAt;
     
     public User(Long userId, String username, String password, String email, Date createdAt) {
@@ -37,17 +35,17 @@ public class User {
 	public User(String username, String password, String email) {
 		super();
 		this.username = username;
-		this.password = password;
+		this.password_hash = password;
 		this.email = email;
 	}
 
 	public Long getUserId() {
-        return userId;
+        return user_Id;
     }
 
     public void setUserId(Long userId) /*throw*/{
-        if(this.userId == 0);
-        this.userId = userId;
+        if(this.user_Id == 0);
+        this.user_Id = userId;
     }
 
     public String getUsername() {
@@ -60,12 +58,12 @@ public class User {
     }
 
     public String getPassword() {
-        return password;
+        return password_hash;
     }
 
     public void setPassword(String password) /*throw*/{
-        if(this.password == null);
-        this.password = password;
+        if(this.password_hash == null);
+        this.password_hash = password;
     }
 
     public String getEmail() {

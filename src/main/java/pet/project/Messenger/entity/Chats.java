@@ -1,16 +1,32 @@
 package pet.project.Messenger.entity;
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.relational.core.mapping.Column;
 
+
+import java.util.ArrayList;
+import java.util.List;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+
+@Entity
 public class Chats {
   @Id
-  @Column("chat_id")
+  @GeneratedValue(strategy = GenerationType.AUTO)
   private long chatId;
-  @Column("chat_name")
   private String chatName;
-  @Column("is_group")
   private boolean isGroup;
+  
+  @OneToMany(cascade = CascadeType.ALL)
+  private List<Messages> messages = new ArrayList();
+  
+  public void addMessage(Messages message) { this.messages.add(message);
+  }
+  public void addMessages(List<Messages> messages) { this.messages.addAll(messages);
+  }
 
     public Chats() {
     }

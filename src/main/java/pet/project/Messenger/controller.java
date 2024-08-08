@@ -5,8 +5,6 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.data.jdbc.repository.query.Modifying;
-import org.springframework.data.jdbc.repository.query.Query;
 import org.springframework.data.repository.Repository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
@@ -26,13 +24,14 @@ import pet.project.Messenger.repository.dao.jdbc.UserRepo;
 @RequestMapping("/")
 @Controller
 public class controller {
-	private final UserDao userDaoImpl;
-	public controller( UserDao userDaoImpl) {
-		super();
-		this.userDaoImpl = userDaoImpl;
-	}
+	
+	@Autowired
+	private UserRepo userRepo;
+	
 	@GetMapping 
 	public String home() {
+		
+		System.out.print(userRepo.findjjhjj("ali1").getEmail());
 		return "messenger.html"; 
 	}
 	@ModelAttribute

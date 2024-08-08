@@ -2,17 +2,15 @@ package pet.project.Messenger.entity;
 
 import java.sql.Date;
 
-import org.springframework.data.relational.core.mapping.Column;
-import org.springframework.data.relational.core.mapping.Table;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 
-@Table("chatParticipants")
+@Entity
 public class ChatParticipants {
-	@Column("chat_id")
+	@Id
 	private long chatId;
-	@Column("user_id")
     private long userId;
     private String role;
-    @Column("joined_at")
     private Date joinedAt;
 
     public ChatParticipants() {

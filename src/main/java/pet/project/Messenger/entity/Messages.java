@@ -2,18 +2,18 @@ package pet.project.Messenger.entity;
 
 import java.sql.Date;
 
-import org.springframework.data.relational.core.mapping.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 
+
+@Entity
 public class Messages {
-	@Column("message_id")
+	@Id
     private long messageId;
-	@Column("chat_id")
     private long chatId;
-    @Column("sender_id")
+    
 	private long senderId;
-    @Column("message_text")
     private String messageText;
-    @Column("sent_at")
     private Date sentAt;
 
     public Messages() {
