@@ -8,7 +8,6 @@ import org.springframework.stereotype.Repository;
 import pet.project.Messenger.entity.User;
 
 @Repository
-public interface UserDao extends JpaRepository<User,Integer>{
+public interface UserRepo extends JpaRepository<User,Integer>{
 	public List<User> readByUsername(String username);
-	public User findjjhjj(String name);
 }

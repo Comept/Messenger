@@ -17,21 +17,26 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import lombok.extern.slf4j.Slf4j;
 import pet.project.Messenger.entity.Chats;
 import pet.project.Messenger.entity.User;
-import pet.project.Messenger.repository.dao.UserDao;
-import pet.project.Messenger.repository.dao.jdbc.UserRepo;
+import pet.project.Messenger.repository.dao.jdbc.UserService;
 
 @Slf4j
-@RequestMapping("/")
+@RequestMapping("/m")
 @Controller
 public class controller {
 	
-	@Autowired
-	private UserRepo userRepo;
+
+	private final UserService userService;
+	
+	
+	public controller(UserService userService) {
+		super();
+		this.userService = userService;
+	}
 	
 	@GetMapping 
 	public String home() {
 		
-		System.out.print(userRepo.findjjhjj("ali1").getEmail());
+		System.out.print(userService.findjjhjj("ali1").getEmail());
 		return "messenger.html"; 
 	}
 	@ModelAttribute

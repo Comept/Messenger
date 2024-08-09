@@ -1,17 +1,22 @@
 package pet.project.Messenger.entity;
 
-import java.sql.Date;
 
-import jakarta.persistence.Column;
+import java.sql.Date;
+import java.util.Arrays;
+import java.util.Collection;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import lombok.Data;
 
 
 @Entity
 @Table(name="users")
-public class User {
+public class User implements UserDetails{
 	@Id
     private Long user_Id;
     private String username;
@@ -83,5 +88,13 @@ public class User {
         if(this.createdAt == null);
         this.createdAt = createdAt;
     }
+
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		return Arrays.asList(new SimpleGrantedAuthority("USER_ROLE"));
+	}
+	
+	
+	
 
 }
