@@ -1,4 +1,4 @@
-package pet.project.Messenger.entity;
+package pet.project.Messenger.model;
 
 
 

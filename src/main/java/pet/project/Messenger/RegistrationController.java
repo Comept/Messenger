@@ -1,35 +1,39 @@
 package pet.project.Messenger;
 
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
-import pet.project.Messenger.repository.dao.UserRepo;
+import pet.project.Messenger.repository.UserRepository;
 import pet.project.Messenger.security.RegistrationForm;
 @Controller 
 @RequestMapping("/register")
 public class RegistrationController {
 	
-	private UserRepo userRepo;
+	private UserRepository userRepository;
 	
 	private PasswordEncoder passwordEncoder;
 	
 	public RegistrationController(
-		UserRepo userRepo, PasswordEncoder passwordEncoder) {
-		this.userRepo = userRepo;
+		UserRepository userRepository, PasswordEncoder passwordEncoder) {
+		this.userRepository = userRepository;
 		this.passwordEncoder = passwordEncoder; 
 	}
 	
 	@GetMapping
-	public String registerForm() {
-		return "registration"; 
+	public String regForm() {
+		return "registration.html"; 
 	}
 	
 	@PostMapping
-	public String processRegistration(RegistrationForm form) {
-		userRepo.save(form.toUser(passwordEncoder));
+	public String processRegistration(RegistrationForm registrationForm) {
+		userRepository.save(registrationForm.toUser(passwordEncoder));
 		return "redirect:/login"; 
 	}
 }

@@ -61,14 +61,22 @@
 <body>
     <div class="container">
         <h2>Регистрация</h2>
-        <form>
-            <input type="text" placeholder="Имя пользователя" required>
-            <input type="email" placeholder="Email" required>
-            <input type="password" placeholder="Пароль" required>
-            <input type="password" placeholder="Подтвердите пароль" required>
-            <button type="submit">Зарегистрироваться</button>
-        </form>
-        <a href="loginn" class="link">Уже есть аккаунт? Войти</a>
+        <form method="POST" th:action="@{/register}" th:object="${registrationForm}">
+        
+			<label for="username">Username: </label> 
+			<input name="username" type="text"/><br/>
+
+			<label for="email">Email: </label> 
+			<input name="email" type="email"/><br/>
+
+			<label for="password">Password: </label> 
+			<input name="password" type="password"/><br/>
+			
+			
+			<button>Registration</button>
+		</form>
+
+        <a href="login" class="link">Уже есть аккаунт? Войти</a>
     </div>
 </body>
 </html>

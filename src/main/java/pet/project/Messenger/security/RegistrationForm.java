@@ -1,9 +1,13 @@
 package pet.project.Messenger.security;
+ 
+import java.util.Date;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Component;
 
-import pet.project.Messenger.entity.User;
+import pet.project.Messenger.model.User;
 
+@Component
 public class RegistrationForm {
 	private String username;
 	private String email;
@@ -29,7 +33,8 @@ public class RegistrationForm {
 	}
 	
 	public User toUser(PasswordEncoder passwordEncoder) {
-		return new User(username, passwordEncoder.encode(password), email);
+		
+		return new User(username, passwordEncoder.encode(password), email, new Date());
 	}
 	
 	

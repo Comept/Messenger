@@ -15,6 +15,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 public class SecurityConfig {
@@ -31,12 +32,17 @@ public class SecurityConfig {
 				Arrays.asList(new SimpleGrantedAuthority("ROLE_USER"))));
 		usersList.add(new User(
 				"woody", encoder.encode("password"),
-				Arrays.asList(new SimpleGrantedAuthority("ROLE_USER")))); return new InMemoryUserDetailsManager(usersList);
+				Arrays.asList(new SimpleGrantedAuthority("USER")))); 
+		return new InMemoryUserDetailsManager(usersList);
 	}
-//	@Bean
-//	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-//	http.authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests.requestMatchers("/m").hasRole("USER") .requestMatchers("/", "/**").permitAll());
-//	return http.build();
-//	}
+	
+	@Bean
+	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+//	http.authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests.requestMatchers("/chats/**").hasRole("USER")
+//            .anyRequest().authenticated());
+	http.formLogin(formLogin->formLogin.loginPage("/login").defaultSuccessUrl("/chats"));
+
+	return http.build();
+	}
 
 }
