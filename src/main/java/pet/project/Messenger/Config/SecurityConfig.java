@@ -8,14 +8,17 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+
+import pet.project.Messenger.model.User;
+import pet.project.Messenger.repository.UserRepository;
 
 @Configuration
 public class SecurityConfig {
@@ -25,23 +28,21 @@ public class SecurityConfig {
 		
 	return new BCryptPasswordEncoder(); }
 
-	@Bean
-	public UserDetailsService userDetailsService(PasswordEncoder encoder) {
-		List<UserDetails> usersList = new ArrayList<>(); usersList.add(new User(
-				"buzz", encoder.encode("password"),
-				Arrays.asList(new SimpleGrantedAuthority("ROLE_USER"))));
-		usersList.add(new User(
-				"woody", encoder.encode("password"),
-				Arrays.asList(new SimpleGrantedAuthority("USER")))); 
-		return new InMemoryUserDetailsManager(usersList);
-	}
+	 @Bean
+	 public UserDetailsService userDetailsService(UserRepository userRepo) {
+	  return username -> {
+	    User user = userRepo.findByUsername(username);
+	    if (user != null) return user;
+	    throw new UsernameNotFoundException("User ‘" + username + "’ not found");
+	  };
+	 }
 	
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-//	http.authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests.requestMatchers("/chats/**").hasRole("USER")
-//            .anyRequest().authenticated());
-	http.formLogin(formLogin->formLogin.loginPage("/login").defaultSuccessUrl("/chats"));
-
+	http.authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests.requestMatchers("/login", "/register").permitAll()
+            .anyRequest().authenticated())
+		.formLogin((formLogin) -> formLogin.loginPage("/login").defaultSuccessUrl("/chats").permitAll())
+		.logout((logout) -> logout.logoutUrl("/logout").logoutSuccessUrl("/login").invalidateHttpSession(true).deleteCookies("JSESSIONID").permitAll());
 	return http.build();
 	}
 

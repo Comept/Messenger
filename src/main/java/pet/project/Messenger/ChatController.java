@@ -6,7 +6,7 @@ import java.util.List;
 
 
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import lombok.extern.slf4j.Slf4j;
 import pet.project.Messenger.model.Chats;
 import pet.project.Messenger.model.Contacts;
+import pet.project.Messenger.model.User;
 import pet.project.Messenger.servise.ContactsService;
 import pet.project.Messenger.servise.UserService;
 
@@ -33,7 +34,7 @@ public class ChatController {
 		this.contactsService = contactsService;
 	}
 	@GetMapping 
-	public String chatPage(Model model) {
+	public String chatPage(Model model,  @AuthenticationPrincipal User user) {
 		List<Chats> chats = Arrays.asList(
 				new Chats(1, "чат 1"),
 				new Chats(2, "чат 2"),
@@ -42,14 +43,18 @@ public class ChatController {
 				new Chats(5, "чат 5"),
 				new Chats(6, "чат 3456")
 				);
-		//System.out.println(contactsService.findAll().toString());
+		
+		System.out.println(user.getUserId());
 		model.addAttribute("chats", chats);
 		return "messenger.html"; 
 	}
 	
 	@GetMapping("/createNew")
-	public String creatingChatPage(Model model, Authentication authentication) {
-		System.out.println(contactsService.findAll().toString());
+	public String creatingChatPage(Model model,   @AuthenticationPrincipal User user)
+	{
+		
+		contactsService.findUserContacts(user.getUserId());
+		//model.addAttribute("contacts",contactsService.findUserContacts(user));
 		
 		return "createNewChat.html";
 	}

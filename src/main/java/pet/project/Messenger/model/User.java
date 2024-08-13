@@ -26,7 +26,7 @@ public class User implements UserDetails, Serializable{
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "user_id",unique=true, nullable = false)
+    @Column(unique=true, nullable = false)
     private Long id;
     private String username;
     private String password_hash;

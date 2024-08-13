@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Repository;
 
 import pet.project.Messenger.model.Contacts;
+import pet.project.Messenger.model.User;
 import pet.project.Messenger.repository.ContactsRepository;
 
 @Repository
@@ -16,7 +17,9 @@ public class ContactsService {
 		super();
 		this.contactsRepository = contactsRepository;
 	}
-	public List<Contacts> findAll(){
-		return contactsRepository.findByUserId("ali1");
+	public void findUserContacts(long user_id){
+		List<Contacts> c = contactsRepository.findByUserId1(user_id);
+		//if(c==null) System.out.println("@3234");
+//		return null;
 	}
 }

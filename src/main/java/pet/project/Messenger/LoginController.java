@@ -25,12 +25,7 @@ public class LoginController {
 	
 	@GetMapping
 	public String registerForm() {
-		return "login"; 
-	}
-	
-	@PostMapping
-	public String processRegistration() {
-		return "redirect:/login"; 
+		return "login.html"; 
 	}
 
 }

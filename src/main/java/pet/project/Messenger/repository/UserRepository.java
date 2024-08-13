@@ -9,5 +9,5 @@ import pet.project.Messenger.model.User;
 
 @Repository
 public interface UserRepository extends JpaRepository<User,Integer>{
-	public List<User> readByUsername(String username);
+	public User findByUsername(String username);
 }

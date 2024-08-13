@@ -20,8 +20,5 @@ public class UserService{
 		this.userRepository = userRepository;
 	}
 
-	public User findjjhjj(String name) {
-		return userRepository.readByUsername(name).getFirst();
-	}
 	
 }

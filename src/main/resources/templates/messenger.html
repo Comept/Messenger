@@ -114,8 +114,8 @@
         </ul>
     </div>
 	<div class="add-chat-container">
-				<a href="/createNew">
-			    <button id="add-chat-btn" href = "localhost:8080/login">Добавить чат</button>
+				<a th:href="@{/chats/createNew}">
+			    <button id="add-chat-btn">Добавить чат</button>
 				</a>
 	</div>
     <div class="main-content" id="main-content">
@@ -126,6 +126,7 @@
 			
         </ul>
     </div>
+	<p>Click <a th:href="@{/logout}">here</a> to logout.</p>
     <script>
         const menuBtn = document.getElementById('menu-btn');
         const closeBtn = document.getElementById('close-btn');
