@@ -101,6 +101,10 @@
 		.add-chat-container button:hover {
 		    background-color: #2980b9;
 		}
+		a {
+		    text-decoration: none;
+			color: black;
+		   }
     </style>
 </head>
 <body>
@@ -114,7 +118,7 @@
         </ul>
     </div>
 	<div class="add-chat-container">
-				<a th:href="@{/chats/createNew}">
+				<a th:href="@{/chats/create-chat}">
 			    <button id="add-chat-btn">Добавить чат</button>
 				</a>
 	</div>
@@ -122,8 +126,9 @@
         <span class="menu-btn" id="menu-btn">&#9776;</span>
         <h2>Мессенджер</h2>
         <ul th:each="chat : ${chats}" class="chat-list">
+			 <a th:href="@{/chats/} + ${chat.id}">
             <li th:text="${chat.chatName}" >Чат 1</li>
-			
+			 </a>
         </ul>
     </div>
 	<p>Click <a th:href="@{/logout}">here</a> to logout.</p>

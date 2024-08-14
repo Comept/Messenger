@@ -42,10 +42,10 @@ CREATE TABLE messages (
 
 -- Таблица контактов
 CREATE TABLE contacts (
-	id SERIAL PRIMARY KEY,
     user1_id INT REFERENCES Users(id) ON DELETE CASCADE,
     user2_id INT REFERENCES Users(id) ON DELETE CASCADE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    PRIMARY KEY (user1_id, user2_id)
 );
 
 -- Таблица файлов

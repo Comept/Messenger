@@ -15,40 +15,34 @@ import jakarta.persistence.OneToMany;
 @Entity
 public class Chats {
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  private long chatId;
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private long id;
   private String chatName;
   private boolean isGroup;
-  
-  @OneToMany(cascade = CascadeType.ALL)
-  private List<Messages> messages = new ArrayList();
-  
-  public void addMessage(Messages message) { this.messages.add(message);
-  }
-  public void addMessages(List<Messages> messages) { this.messages.addAll(messages);
-  }
 
     public Chats() {
     }
 
-    public Chats(long chatId, String chatName, boolean isGroup) {
-        setChatId(chatId);
+    public Chats(long id, String chatName, boolean isGroup) {
+        setId(id);
         setChatName(chatName);
         setIsGroup(isGroup);
     }
 
-    public Chats(long chatId, String chatName) {
+    public Chats(long id, String chatName) {
 		super();
-		this.chatId = chatId;
+		this.id = id;
 		this.chatName = chatName;
 	}
+    
+    
 
-	public long getChatId() {
-        return chatId;
+	public long getId() {
+        return id;
     }
 
-    public void setChatId(long chatId) {
-        this.chatId = chatId;
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getChatName() {

@@ -1,14 +1,20 @@
 package pet.project.Messenger.model;
 
-import java.sql.Date;
+import java.io.Serializable;
+import java.util.Date;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.IdClass;
+import jakarta.persistence.Table;
+import pet.project.Messenger.model.PrimeryKeyses.ChatPartricipantsPK;
 
 @Entity
-public class ChatParticipants {
+@IdClass(ChatPartricipantsPK.class)
+public class ChatParticipants implements Serializable{
 	@Id
 	private long chatId;
+	@Id
     private long userId;
     private String role;
     private Date joinedAt;
@@ -54,4 +60,11 @@ public class ChatParticipants {
     public void setJoinedAt(Date joinedAt) {
         this.joinedAt = joinedAt;
     }
+
+	@Override
+	public String toString() {
+		return "ChatParticipants [chatId=" + chatId + ", userId=" + userId + ", role=" + role + ", joinedAt=" + joinedAt
+				+ "]";
+	}
+    
 }

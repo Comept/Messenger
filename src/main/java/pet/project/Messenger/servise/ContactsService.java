@@ -4,22 +4,36 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
+import pet.project.Messenger.dto.ContactDto;
 import pet.project.Messenger.model.Contacts;
 import pet.project.Messenger.model.User;
 import pet.project.Messenger.repository.ContactsRepository;
+import pet.project.Messenger.repository.UserRepository;
 
 @Repository
 public class ContactsService {
 
 	private final ContactsRepository contactsRepository;
+	private final UserRepository userRepository;
 
-	public ContactsService(ContactsRepository contactsRepository) {
+	public ContactsService(ContactsRepository contactsRepository, UserRepository userRepository) {
 		super();
 		this.contactsRepository = contactsRepository;
+		this.userRepository = userRepository;
 	}
-	public void findUserContacts(long user_id){
-		List<Contacts> c = contactsRepository.findByUserId1(user_id);
-		//if(c==null) System.out.println("@3234");
-//		return null;
+	public List<ContactDto> findUserContacts(long user_id){
+		
+		List<Contacts> contacts = contactsRepository.findByUserId1OrUserId2(user_id,user_id);
+		
+		List <Long> usersId =  contacts.stream()
+				.map(contact -> {if(contact.getUserId1() == user_id) return contact.getUserId2();
+				else return contact.getUserId1(); } ).toList();
+		
+		List<User> contactsUser = userRepository.findByIdIsIn(usersId);
+		
+		List<ContactDto> contactsDto = contactsUser.stream()
+				.map(user -> new ContactDto(user.getUserId(), user.getUsername())).toList();
+		
+		return contactsDto;
 	}
 }

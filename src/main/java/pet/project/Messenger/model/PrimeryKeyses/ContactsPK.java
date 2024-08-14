@@ -32,5 +32,10 @@ public class ContactsPK implements Serializable{
 		this.userId1 = userId1;
 		this.userId2 = userId2;
 	}
+	@Override
+	public String toString() {
+		return "ContactsPK [userId1=" + userId1 + ", userId2=" + userId2 + "]";
+	}
+	
 	
 }

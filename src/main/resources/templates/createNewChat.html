@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -32,6 +32,15 @@
             border: 1px solid #ccc;
             border-radius: 4px;
             box-sizing: border-box;
+        }
+        .search-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .search-container input[type="text"] {
+            flex-grow: 1;
+            margin-right: 10px;
         }
         .contacts {
             margin: 20px 0;
@@ -75,38 +84,34 @@
 <body>
     <div class="container">
         <h2>Создать новый чат</h2>
-        <form id="create-chat-form">
-            <input type="text" id="chat-name" placeholder="Название чата" required>
-			<div class="field">
-				<label class="label">Select Participants</label>
-			    	<div class="control">
-			        	<div class="select is-multiple">
-			            	<select name="participantIds" multiple>
-			                	<option th:each="contact : ${contacts}" 
-			                            th:value="${contact.id}" 
-			                            th:text="${contact.username}"></option>
-			                </select>
-			            </div>
-			       </div>
-			 </div>
+        <form th:action="@{/chats/create-chat}" th:object="${contactsForm}" method="post">
+			<input type="text" th:field="*{chatName}" id="chat-name" name="chatName" placeholder="Название чата" required>
+            <div class="search-container">
+                <input type="text" id="search-bar" placeholder="Поиск по никнейму">
+                <button type="button" id="search-btn">Поиск</button>
+            </div>
+            <div class="contacts" id="contacts-list">
+                <label th:each="contact : ${contacts}">
+                    <input type="checkbox" th:value="${contact.id}" th:field="*{contacts}"> <span th:text="${contact.username}">User</span>
+                </label>
+            </div>
             <button type="submit">Создать чат</button>
         </form>
     </div>
 
     <script>
-        document.getElementById('create-chat-form').addEventListener('submit', function(event) {
-            event.preventDefault();
+        document.getElementById('search-btn').addEventListener('click', function() {
+            const searchQuery = document.getElementById('search-bar').value.toLowerCase();
+            const contacts = document.querySelectorAll('#contacts-list label');
 
-            const chatName = document.getElementById('chat-name').value;
-            const selectedContacts = Array.from(document.querySelectorAll('.contacts input[type="checkbox"]:checked'))
-                                         .map(checkbox => checkbox.parentElement.textContent.trim());
-
-            if (chatName && selectedContacts.length > 0) {
-                alert(`Чат "${chatName}" создан с участниками: ${selectedContacts.join(', ')}`);
-                // Здесь можно добавить код для отправки данных на сервер или другой логики
-            } else {
-                alert('Пожалуйста, введите название чата и выберите хотя бы одного участника.');
-            }
+            contacts.forEach(contact => {
+                const username = contact.querySelector('input[type="checkbox"]').dataset.username.toLowerCase();
+                if (username.includes(searchQuery)) {
+                    contact.style.display = 'block';
+                } else {
+                    contact.style.display = 'none';
+                }
+            });
         });
     </script>
 </body>

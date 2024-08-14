@@ -11,5 +11,5 @@ import pet.project.Messenger.model.User;
 import pet.project.Messenger.model.PrimeryKeyses.ContactsPK;
 
 public interface ContactsRepository extends CrudRepository<Contacts, ContactsPK>{
-	List<Contacts> findByUserId1(long userId1);
+	List<Contacts> findByUserId1OrUserId2(long userid1, long userid2);
 }
