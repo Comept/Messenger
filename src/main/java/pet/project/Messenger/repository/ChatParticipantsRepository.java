@@ -10,4 +10,6 @@ import pet.project.Messenger.model.PrimeryKeyses.ChatPartricipantsPK;
 public interface ChatParticipantsRepository extends CrudRepository<ChatParticipants,ChatPartricipantsPK>{
 	public ChatParticipants findByChatIdAndUserId(long userId, long chatId);
 	public List<ChatParticipants> findChatIsByUserId(long userId);
+	public List<ChatParticipants> findByChatId(long chatId);
+	public List<ChatParticipants> findByChatIdAndUserIdIn(long chatId, List<Long> userId);
 }

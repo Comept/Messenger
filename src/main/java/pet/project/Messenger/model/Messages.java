@@ -1,17 +1,23 @@
 package pet.project.Messenger.model;
 
-import java.sql.Date;
+import java.util.Date;
 
+import jakarta.persistence.Basic;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 
 @Entity
 public class Messages {
 	@Id
-    private long messageId;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(unique=true, nullable = false)
+    private long id;
     private long chatId;
-    
 	private long senderId;
     private String messageText;
     private Date sentAt;
@@ -19,8 +25,7 @@ public class Messages {
     public Messages() {
     }
 
-    public Messages(long messageId, long chatId, long senderId, String messageText, Date sentAt) {
-        setMessageId(messageId);
+    public Messages(long chatId, long senderId, String messageText, Date sentAt) {
         setChatId(chatId);
         setSenderId(senderId);
         setMessageText(messageText);
@@ -33,12 +38,12 @@ public class Messages {
         setMessageText(messageText);
     }
 
-    public long getMessageId() {
-        return messageId;
+    public long getId() {
+        return id;
     }
 
-    public void setMessageId(long messageId) {
-        this.messageId = messageId;
+    public void setId(long messageId) {
+        this.id = messageId;
     }
 
     public long getChatId() {

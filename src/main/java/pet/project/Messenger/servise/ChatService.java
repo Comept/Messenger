@@ -7,22 +7,27 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Repository;
 
+import pet.project.Messenger.dto.ChatDto;
 import pet.project.Messenger.dto.CreatChatDto;
 import pet.project.Messenger.model.ChatParticipants;
 import pet.project.Messenger.model.Chats;
+import pet.project.Messenger.model.Messages;
 import pet.project.Messenger.model.User;
 import pet.project.Messenger.repository.ChatParticipantsRepository;
 import pet.project.Messenger.repository.ChatsRepository;
+import pet.project.Messenger.repository.MessagesRepository;
 
 @Repository
 public class ChatService {
 
 	private final ChatsRepository chatsRepository;
 	private final ChatParticipantsRepository chatParticipantsRepository;
-	public ChatService(ChatsRepository chatsRepository, ChatParticipantsRepository chatParticipantsRepository) {
+	private final MessagesRepository messagesRepository;
+	public ChatService(ChatsRepository chatsRepository, ChatParticipantsRepository chatParticipantsRepository, MessagesRepository messagesRepository) {
 		super();
 		this.chatsRepository = chatsRepository;
 		this.chatParticipantsRepository = chatParticipantsRepository;
+		this.messagesRepository = messagesRepository;
 	}
 
 	public void createChat(CreatChatDto creatChatDto) {
@@ -42,5 +47,9 @@ public class ChatService {
 	public List<Chats> getUserChats(long userId) {
 		List<ChatParticipants> userChats = chatParticipantsRepository.findChatIsByUserId(userId);
 		return chatsRepository.findByIdIn(userChats.stream().map(r->r.getChatId()).toList());
+	}
+	
+	public String getChatNameByChatId(long chatId) {
+		return chatsRepository.findById(chatId).get().getChatName();
 	}
 }

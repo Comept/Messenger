@@ -23,7 +23,7 @@ CREATE TABLE chats (
 );
 
 -- Таблица участников чатов
-CREATE TABLE chatParticipants (
+CREATE TABLE chat_participants (
     chat_id INT REFERENCES Chats(id) ON DELETE CASCADE,
     user_id INT REFERENCES Users(id) ON DELETE CASCADE,
     role VARCHAR(20) DEFAULT 'member',

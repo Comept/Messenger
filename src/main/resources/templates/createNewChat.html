@@ -85,7 +85,7 @@
     <div class="container">
         <h2>Создать новый чат</h2>
         <form th:action="@{/chats/create-chat}" th:object="${contactsForm}" method="post">
-			<input type="text" th:field="*{chatName}" id="chat-name" name="chatName" placeholder="Название чата" required>
+			<input type="text" th:field="*{chatName}" id="chat-name" name="chatName" placeholder="Название чата">
             <div class="search-container">
                 <input type="text" id="search-bar" placeholder="Поиск по никнейму">
                 <button type="button" id="search-btn">Поиск</button>

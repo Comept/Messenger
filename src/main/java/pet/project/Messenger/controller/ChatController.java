@@ -16,14 +16,17 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import lombok.extern.slf4j.Slf4j;
+import pet.project.Messenger.dto.ChatDto;
 import pet.project.Messenger.dto.ContactDto;
 import pet.project.Messenger.dto.CreatChatDto;
+import pet.project.Messenger.dto.MessageDto;
 import pet.project.Messenger.model.Chats;
 import pet.project.Messenger.model.Contacts;
 import pet.project.Messenger.model.User;
 import pet.project.Messenger.servise.ChatParticipantsService;
 import pet.project.Messenger.servise.ChatService;
 import pet.project.Messenger.servise.ContactsService;
+import pet.project.Messenger.servise.MessagesService;
 import pet.project.Messenger.servise.UserService;
 
 @Slf4j
@@ -34,12 +37,16 @@ public class ChatController {
 	private final ContactsService contactsService;
 	private final ChatService chatService;
 	private final ChatParticipantsService chatParticipantsService;
+	private final MessagesService messagesService;
+	private final UserService userService;
 	public ChatController(ContactsService contactsService, ChatService chatService, 
-			ChatParticipantsService chatParticipantsService) {
+			ChatParticipantsService chatParticipantsService, MessagesService messagesService, UserService userService) {
 		super();
 		this.contactsService = contactsService;
 		this.chatService = chatService;
 		this.chatParticipantsService = chatParticipantsService;
+		this.messagesService = messagesService;
+		this.userService = userService;
 	}
 	@GetMapping 
 	public String viewMessengerPage(Model model,  @AuthenticationPrincipal User user) {
@@ -66,13 +73,30 @@ public class ChatController {
 	
 	@GetMapping("/{id}")
 	public String viewChatPage(Model model, @PathVariable("id") Long chatId, @AuthenticationPrincipal User user) {
-		try{
-			chatParticipantsService.isUserMemberOfChat(user.getUserId(), chatId);
+		try{			
+			model.addAttribute("userId", user.getUserId());
+			model.addAttribute("chatId", chatId);
+			model.addAttribute("usernames", userService.getUsernamesOfUsersById(chatParticipantsService.getChatMembers(chatId)));
+			model.addAttribute("usersRole", chatParticipantsService.getMembersRole(chatId, chatParticipantsService.getChatMembers(chatId)));
+			model.addAttribute("messages", messagesService.getMessagesByChatId(chatId));
+			model.addAttribute("chatName", chatService.getChatNameByChatId(chatId));
+			model.addAttribute("messageDto", new MessageDto());
 		}
 		catch(Exception ex){
 				System.out.println(ex);
 		}
-		return "messenger.html"; 
+		return "chat.html"; 
+	}
+	@PostMapping("/{id}")
+	public String saveMessage(Model model, @PathVariable("id") Long chatId, @AuthenticationPrincipal User user, @ModelAttribute("messageDto") MessageDto message) {
+		try{
+			chatParticipantsService.isUserMemberOfChat(user.getUserId(), chatId);
+			messagesService.saveMessage( chatId, user.getUserId(), message.getMessage());
+		}
+		catch(Exception ex){
+				System.out.println(ex);
+		}
+		return "redirect:/chats/" + chatId; 
 	}
 	
 }
