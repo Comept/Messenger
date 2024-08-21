@@ -11,5 +11,6 @@ import pet.project.Messenger.model.User;
 @Repository
 public interface UserRepository extends JpaRepository<User,Integer>{
 	public User findByUsername(String username);
+	public User findByEmail(String email);
 	public List <User> findByIdIsIn(Collection<Long> usersId);
 }

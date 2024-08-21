@@ -11,13 +11,13 @@ import pet.project.Messenger.security.RegistrationForm;
 
 @Controller 
 @RequestMapping("/login")
-public class LoginController {
+public class DesignLoginController {
 	
 	private UserRepository userRepository;
 	
 	private PasswordEncoder passwordEncoder;
 	
-	public LoginController(
+	public DesignLoginController(
 		UserRepository userRepository, PasswordEncoder passwordEncoder) {
 		this.userRepository = userRepository;
 		this.passwordEncoder = passwordEncoder; 

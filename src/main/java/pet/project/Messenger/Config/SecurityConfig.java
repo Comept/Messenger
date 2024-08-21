@@ -30,10 +30,10 @@ public class SecurityConfig {
 
 	 @Bean
 	 public UserDetailsService userDetailsService(UserRepository userRepo) {
-	  return username -> {
-	    User user = userRepo.findByUsername(username);
+	  return email -> {
+	    User user = userRepo.findByEmail(email);
 	    if (user != null) return user;
-	    throw new UsernameNotFoundException("User ‘" + username + "’ not found");
+	    throw new UsernameNotFoundException("User ‘" + email + "’ not found");
 	  };
 	 }
 	
@@ -41,7 +41,7 @@ public class SecurityConfig {
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 	http.authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests.requestMatchers("/login", "/register").permitAll()
             .anyRequest().authenticated())
-		.formLogin((formLogin) -> formLogin.loginPage("/login").defaultSuccessUrl("/chats").permitAll())
+		.formLogin((formLogin) -> formLogin.loginPage("/login").defaultSuccessUrl("/chats").usernameParameter("email").passwordParameter("password").permitAll())
 		.logout((logout) -> logout.logoutUrl("/logout").logoutSuccessUrl("/login").invalidateHttpSession(true).deleteCookies("JSESSIONID").permitAll());
 	return http.build();
 	}

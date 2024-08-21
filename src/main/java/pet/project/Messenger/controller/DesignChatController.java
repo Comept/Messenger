@@ -32,14 +32,14 @@ import pet.project.Messenger.servise.UserService;
 @Slf4j
 @RequestMapping("/chats")
 @Controller
-public class ChatController {
+public class DesignChatController {
 	
 	private final ContactsService contactsService;
 	private final ChatService chatService;
 	private final ChatParticipantsService chatParticipantsService;
 	private final MessagesService messagesService;
 	private final UserService userService;
-	public ChatController(ContactsService contactsService, ChatService chatService, 
+	public DesignChatController(ContactsService contactsService, ChatService chatService, 
 			ChatParticipantsService chatParticipantsService, MessagesService messagesService, UserService userService) {
 		super();
 		this.contactsService = contactsService;

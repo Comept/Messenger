@@ -25,7 +25,7 @@
             text-align: center;
             margin-bottom: 20px;
         }
-        input[type="text"], input[type="password"] {
+        input[type="email"], input[type="password"] {
             width: 100%;
             padding: 10px;
             margin: 10px 0;
@@ -63,7 +63,7 @@
         <h2>Вход</h2>
         <form method="POST" th:action="@{/login}" id="loginForm"> 
 			<label for="text">Email: </label>
-			<input type="text" name="username" id="username" /><br/>
+			<input type="email" name="email" id="email" /><br/>
 			<label for="password">Password: </label>
 			<input type="password" name="password" id="password" /><br/>
 			<input type="submit" value="Login"/>

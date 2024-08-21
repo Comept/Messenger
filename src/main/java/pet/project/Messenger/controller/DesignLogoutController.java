@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("/logout")
-public class LogoutController {
+public class DesignLogoutController {
 	@GetMapping
 	public String logout() {
 		return "login.html";

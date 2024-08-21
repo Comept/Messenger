@@ -14,7 +14,6 @@
             justify-content: center;
             align-items: center;
         }
-
         .chat-container {
             background-color: #ffffff;
             width: 100%;
@@ -106,7 +105,6 @@
     </style>
 </head>
 <body>
-
 <div class="chat-container">
     <div class="chat-header">
         <h2>Чат</h2>
@@ -137,7 +135,22 @@
     const chatMessages = document.getElementById('chat-messages');
     const messageInput = document.getElementById('message-input');
     const sendButton = document.getElementById('send-button');
+	const menuBtn = document.getElementById('menu-btn');
+	const closeBtn = document.getElementById('close-btn');
+	const sidebar = document.getElementById('sidebar');
+	const mainContent = document.getElementById('main-content');
 
+	menuBtn.addEventListener('click', () => {
+	    sidebar.classList.toggle('open');
+	    mainContent.classList.toggle('shifted');
+		menuBtn.classList.add('hidden');
+	});
+
+	closeBtn.addEventListener('click', () => {
+	    sidebar.classList.remove('open');
+	    mainContent.classList.remove('shifted');
+		menuBtn.classList.remove('hidden');
+	});
     sendButton.addEventListener('click', function() {
         const messageText = messageInput.value.trim();
 
