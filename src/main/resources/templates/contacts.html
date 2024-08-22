@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Контакты</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .contacts-container {
+            background-color: #ffffff;
+            width: 100%;
+            max-width: 600px;
+            height: 80vh;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+        }
+
+        .contacts-header {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .search-bar {
+            display: flex;
+            margin-bottom: 20px;
+        }
+
+        .search-bar input {
+            flex-grow: 1;
+            padding: 10px;
+            border-radius: 20px;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+        }
+
+        .contacts-list {
+            flex-grow: 1;
+            overflow-y: auto;
+            margin-bottom: 20px;
+        }
+
+        .contact {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .contact-name {
+            font-size: 18px;
+        }
+
+        .contact-actions button {
+            padding: 5px 10px;
+            margin-left: 10px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+
+        .contact-actions button.remove {
+            background-color: #e74c3c;
+        }
+
+        .contact-actions button:hover {
+            background-color: #2980b9;
+        }
+
+        .contact-actions button.remove:hover {
+            background-color: #c0392b;
+        }
+    </style>
+</head>
+<body>
+
+<div class="contacts-container">
+    <div class="contacts-header">Контакты</div>
+
+    <div class="search-bar">
+        <input type="text" id="search-input" placeholder="Поиск контактов...">
+    </div>
+
+    <div class="contacts-list" id="contacts-list">
+        <!-- Контакты будут отображены здесь -->
+    </div>
+</div>
+
+<script>
+    let knownContacts = [
+        { id: 1, name: 'Алексей Иванов', isKnown: true },
+        { id: 2, name: 'Мария Петрова', isKnown: true },
+        { id: 3, name: 'Иван Сидоров', isKnown: true }
+    ];
+
+    const contactsList = document.getElementById('contacts-list');
+    const searchInput = document.getElementById('search-input');
+
+    function renderContacts(contacts) {
+        contactsList.innerHTML = '';
+        contacts.forEach(contact => {
+            const contactElement = document.createElement('div');
+            contactElement.classList.add('contact');
+
+            const contactName = document.createElement('div');
+            contactName.classList.add('contact-name');
+            contactName.textContent = contact.name;
+
+            const contactActions = document.createElement('div');
+            contactActions.classList.add('contact-actions');
+
+            const actionButton = document.createElement('button');
+            if (contact.isKnown) {
+                actionButton.textContent = 'Удалить';
+                actionButton.classList.add('remove');
+                actionButton.addEventListener('click', () => removeContact(contact.id));
+            } else {
+                actionButton.textContent = 'Добавить';
+                actionButton.addEventListener('click', () => addContact(contact));
+            }
+
+            contactActions.appendChild(actionButton);
+            contactElement.appendChild(contactName);
+            contactElement.appendChild(contactActions);
+
+            contactsList.appendChild(contactElement);
+        });
+    }
+
+    function addContact(contact) {
+        contact.isKnown = true;
+        knownContacts.push(contact);
+        renderContacts(knownContacts);
+    }
+
+    function removeContact(contactId) {
+        knownContacts = knownContacts.filter(contact => contact.id !== contactId);
+        renderContacts(knownContacts);
+    }
+
+    function searchContacts(query) {
+        const filteredContacts = knownContacts.filter(contact =>
+            contact.name.toLowerCase().includes(query.toLowerCase())
+        );
+
+        if (filteredContacts.length < 5) {
+            fetch(`/searchContacts?q=${encodeURIComponent(query)}`)
+                .then(response => response.json())
+                .then(data => {
+                    const combinedResults = [...filteredContacts, ...data];
+                    renderContacts(combinedResults);
+                });
+        } else {
+            renderContacts(filteredContacts);
+        }
+    }
+
+    searchInput.addEventListener('input', () => {
+        const query = searchInput.value.trim();
+        searchContacts(query);
+    });
+
+    renderContacts(knownContacts);
+</script>
+
+</body>
+</html>
