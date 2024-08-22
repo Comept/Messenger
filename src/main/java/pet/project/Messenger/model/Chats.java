@@ -35,8 +35,6 @@ public class Chats {
 		this.chatName = chatName;
 	}
     
-    
-
 	public long getId() {
         return id;
     }
