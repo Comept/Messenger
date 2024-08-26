@@ -33,7 +33,19 @@ public class User implements UserDetails, Serializable{
     private String email;
     private Date createdAt;
     
-    public User(Long id, String username, String password, String email, Date createdAt) {
+    public Long getId() {
+		return id;
+	}
+
+
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+
+
+	public User(Long id, String username, String password, String email, Date createdAt) {
     	setUserId(id);
         setUsername(username);
         setPassword(password);
@@ -58,6 +70,15 @@ public class User implements UserDetails, Serializable{
     
     public User() {
     }
+
+	public User(int i, String string) {
+		// TODO Auto-generated constructor stub
+		this.id = (long) i;
+		this.username = string;
+		
+	}
+
+
 
 	public Long getUserId() {
         return id;

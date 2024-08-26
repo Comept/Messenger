@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Контакты</title>
+    <title>Добавить в контакты</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -33,19 +33,6 @@
             font-weight: bold;
             margin-bottom: 20px;
             text-align: center;
-        }
-
-        .search-bar {
-            display: flex;
-            margin-bottom: 20px;
-        }
-
-        .search-bar input {
-            flex-grow: 1;
-            padding: 10px;
-            border-radius: 20px;
-            border: 1px solid #ccc;
-            box-sizing: border-box;
         }
 
         .contacts-list {
@@ -87,98 +74,82 @@
         .contact-actions button.remove:hover {
             background-color: #c0392b;
         }
+
+        .search-bar {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .search-bar input[type="text"] {
+            padding: 10px;
+            width: 80%;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 20px;
+        }
+
+        .search-bar button {
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            background-color: #3498db;
+            color: white;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+
+        .search-bar button:hover {
+            background-color: #2980b9;
+        }
     </style>
 </head>
 <body>
 
 <div class="contacts-container">
-    <div class="contacts-header">Контакты</div>
+    <div class="contacts-header">Ваши контакты</div>
 
-    <div class="search-bar">
-        <input type="text" id="search-input" placeholder="Поиск контактов...">
+    <!-- Секция с уже добавленными контактами -->
+    <div class="contacts-list">
+        <div th:if="${knownContacts.size() == 0}">
+            <p>У вас нет добавленных контактов.</p>
+        </div>
+        <div th:each="contact : ${knownContacts}" class="contact">
+            <div class="contact-name" th:text="${contact.username}">Имя пользователя</div>
+            <div class="contact-actions">
+                <form th:action="@{/removeContact}" method="post">
+                    <input type="hidden" th:value="${contact.id}" name="userId"/>
+                    <button type="submit" class="remove">Удалить</button>
+                </form>
+            </div>
+        </div>
     </div>
 
-    <div class="contacts-list" id="contacts-list">
-        <!-- Контакты будут отображены здесь -->
+    <div class="contacts-header">Добавить в контакты</div>
+
+    <!-- Форма поиска -->
+    <div class="search-bar">
+        <form th:action="@{/contact/contacts}" method="get">
+            <input type="text" name="search" placeholder="Введите имя для поиска" th:value="${search}">
+            <button type="submit">Поиск</button>
+        </form>
+    </div>
+
+    <!-- Секция для добавления новых контактов -->
+    <div class="contacts-list">
+        <div th:if="${users.size() == 0}">
+            <p>Ничего не найдено.</p>
+        </div>
+        <div th:each="user : ${users}" class="contact">
+            <div class="contact-name" th:text="${user.username}">Имя пользователя</div>
+            <div class="contact-actions">
+                <form th:action="@{/addContact}" method="post">
+                    <input type="hidden" th:value="${user.id}" name="userId"/>
+                    <button type="submit">Добавить</button>
+                </form>
+            </div>
+        </div>
     </div>
 </div>
-
-<script>
-    let knownContacts = [
-        { id: 1, name: 'Алексей Иванов', isKnown: true },
-        { id: 2, name: 'Мария Петрова', isKnown: true },
-        { id: 3, name: 'Иван Сидоров', isKnown: true }
-    ];
-
-    const contactsList = document.getElementById('contacts-list');
-    const searchInput = document.getElementById('search-input');
-
-    function renderContacts(contacts) {
-        contactsList.innerHTML = '';
-        contacts.forEach(contact => {
-            const contactElement = document.createElement('div');
-            contactElement.classList.add('contact');
-
-            const contactName = document.createElement('div');
-            contactName.classList.add('contact-name');
-            contactName.textContent = contact.name;
-
-            const contactActions = document.createElement('div');
-            contactActions.classList.add('contact-actions');
-
-            const actionButton = document.createElement('button');
-            if (contact.isKnown) {
-                actionButton.textContent = 'Удалить';
-                actionButton.classList.add('remove');
-                actionButton.addEventListener('click', () => removeContact(contact.id));
-            } else {
-                actionButton.textContent = 'Добавить';
-                actionButton.addEventListener('click', () => addContact(contact));
-            }
-
-            contactActions.appendChild(actionButton);
-            contactElement.appendChild(contactName);
-            contactElement.appendChild(contactActions);
-
-            contactsList.appendChild(contactElement);
-        });
-    }
-
-    function addContact(contact) {
-        contact.isKnown = true;
-        knownContacts.push(contact);
-        renderContacts(knownContacts);
-    }
-
-    function removeContact(contactId) {
-        knownContacts = knownContacts.filter(contact => contact.id !== contactId);
-        renderContacts(knownContacts);
-    }
-
-    function searchContacts(query) {
-        const filteredContacts = knownContacts.filter(contact =>
-            contact.name.toLowerCase().includes(query.toLowerCase())
-        );
-
-        if (filteredContacts.length < 5) {
-            fetch(`/searchContacts?q=${encodeURIComponent(query)}`)
-                .then(response => response.json())
-                .then(data => {
-                    const combinedResults = [...filteredContacts, ...data];
-                    renderContacts(combinedResults);
-                });
-        } else {
-            renderContacts(filteredContacts);
-        }
-    }
-
-    searchInput.addEventListener('input', () => {
-        const query = searchInput.value.trim();
-        searchContacts(query);
-    });
-
-    renderContacts(knownContacts);
-</script>
 
 </body>
 </html>
