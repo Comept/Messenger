@@ -1,5 +1,6 @@
 package pet.project.Messenger.servise;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.stereotype.Repository;
@@ -35,5 +36,9 @@ public class ContactsService {
 				.map(user -> new ContactDto(user.getUserId(), user.getUsername())).toList();
 		
 		return contactsDto;
+	}
+	
+	public void addContact(long userId, long contactId) {
+		contactsRepository.save(new Contacts(userId, contactId, new Date()));
 	}
 }

@@ -142,7 +142,7 @@
         <div th:each="user : ${users}" class="contact">
             <div class="contact-name" th:text="${user.username}">Имя пользователя</div>
             <div class="contact-actions">
-                <form th:action="@{/addContact}" method="post">
+                <form th:action="@{/contact/addContact}" method="post">
                     <input type="hidden" th:value="${user.id}" name="userId"/>
                     <button type="submit">Добавить</button>
                 </form>

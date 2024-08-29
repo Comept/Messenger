@@ -8,6 +8,8 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -31,13 +33,18 @@ public class DesignContactController {
 	}
 	@GetMapping("/contacts")
 	public String showContactsPage(@RequestParam(value = "search", required = false) String search, Model model) {
+		if(search == null) search = "";
 		List<User> unknownContacts = userService.getUsersWithUsernameLike(search+"%");
-		List<ContactDto> knownContacts = contactsService.findUserContacts(0);
+		List<ContactDto> knownContacts = contactsService.findUserContacts(1);
 	    model.addAttribute("users", unknownContacts);
 	    model.addAttribute("knownContacts", knownContacts);
 	    model.addAttribute("search", search);
 
 	    return "contacts"; 
 	    }
-	
+	@PostMapping("/addContact")
+	public String addContact(@RequestParam(value = "search", required = false) String search, @ModelAttribute("userId") User newContact, Model model) {
+		contactsService.addContact(1, newContact.getId());
+		return showContactsPage(search, model);
+	}
 }
