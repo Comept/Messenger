@@ -73,7 +73,8 @@ public class DesignChatController {
 	
 	@GetMapping("/{id}")
 	public String viewChatPage(Model model, @PathVariable("id") Long chatId, @AuthenticationPrincipal User user) {
-		try{			
+		try{	
+			chatParticipantsService.isUserMemberOfChat(user.getUserId(), chatId);
 			model.addAttribute("userId", user.getUserId());
 			model.addAttribute("chatId", chatId);
 			model.addAttribute("usernames", userService.getUsernamesOfUsersById(chatParticipantsService.getChatMembers(chatId)));

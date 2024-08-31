@@ -116,8 +116,8 @@
         <div th:each="contact : ${knownContacts}" class="contact">
             <div class="contact-name" th:text="${contact.username}">Имя пользователя</div>
             <div class="contact-actions">
-                <form th:action="@{/removeContact}" method="post">
-                    <input type="hidden" th:value="${contact.id}" name="userId"/>
+                <form th:action="@{/contact/removeContact}" method="post">
+                    <input type="hidden" th:value="${contact.id}" name="contactId"/>
                     <button type="submit" class="remove">Удалить</button>
                 </form>
             </div>
@@ -143,7 +143,7 @@
             <div class="contact-name" th:text="${user.username}">Имя пользователя</div>
             <div class="contact-actions">
                 <form th:action="@{/contact/addContact}" method="post">
-                    <input type="hidden" th:value="${user.id}" name="userId"/>
+                    <input type="hidden" th:value="${user.id}" name="contactId"/>
                     <button type="submit">Добавить</button>
                 </form>
             </div>

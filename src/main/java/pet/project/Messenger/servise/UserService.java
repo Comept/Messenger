@@ -1,5 +1,6 @@
 package pet.project.Messenger.servise;
 
+import pet.project.Messenger.dto.UserDto;
 import pet.project.Messenger.model.User;
 import pet.project.Messenger.repository.UserRepository;
 
@@ -35,7 +36,7 @@ public class UserService{
 		return result;
 	}
 	
-	public List<User> getUsersWithUsernameLike(String username){
-		return userRepository.findByUsernameLike(username);
+	public List<UserDto> getUsersWithUsernameLike(String username){
+		return userRepository.findByUsernameLike(username).stream().map(user -> new UserDto(user.getUserId(),user.getUsername())).toList();
 	}
 }

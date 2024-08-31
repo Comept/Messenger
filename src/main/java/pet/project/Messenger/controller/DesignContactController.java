@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import lombok.extern.slf4j.Slf4j;
 import pet.project.Messenger.model.User;
 import pet.project.Messenger.dto.ContactDto;
+import pet.project.Messenger.dto.UserDto;
 import pet.project.Messenger.servise.ContactsService;
 import pet.project.Messenger.servise.UserService;
 
@@ -32,10 +33,10 @@ public class DesignContactController {
 		this.contactsService = contactsService;
 	}
 	@GetMapping("/contacts")
-	public String showContactsPage(@RequestParam(value = "search", required = false) String search, Model model) {
+	public String showContactsPage(@AuthenticationPrincipal User user, @RequestParam(value = "search", required = false) String search, Model model) {
 		if(search == null) search = "";
-		List<User> unknownContacts = userService.getUsersWithUsernameLike(search+"%");
-		List<ContactDto> knownContacts = contactsService.findUserContacts(1);
+		List<UserDto> unknownContacts = userService.getUsersWithUsernameLike(search+"%");
+		List<ContactDto> knownContacts = contactsService.findUserContacts(user.getId());
 	    model.addAttribute("users", unknownContacts);
 	    model.addAttribute("knownContacts", knownContacts);
 	    model.addAttribute("search", search);
@@ -43,8 +44,14 @@ public class DesignContactController {
 	    return "contacts"; 
 	    }
 	@PostMapping("/addContact")
-	public String addContact(@RequestParam(value = "search", required = false) String search, @ModelAttribute("userId") User newContact, Model model) {
-		contactsService.addContact(1, newContact.getId());
-		return showContactsPage(search, model);
+	public String addContact(@AuthenticationPrincipal User user, @RequestParam(value = "search", required = false) String search, @ModelAttribute("contactId") User newContact, Model model) {
+		contactsService.addContact(user.getUserId(), newContact.getId());
+		return "redirect:/contact/contacts";
+	}
+	@PostMapping("/removeContact")
+	public String removeContact(@AuthenticationPrincipal User user, @RequestParam(value = "search", required = false) String search, @ModelAttribute("contactId") User removedContact, Model model) {
+		System.out.print(removedContact);
+		contactsService.deleteContact(user.getUserId(), removedContact.getId());
+		return "redirect:/contact/contacts";
 	}
 }

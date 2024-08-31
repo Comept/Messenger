@@ -10,6 +10,7 @@ import pet.project.Messenger.model.Contacts;
 import pet.project.Messenger.model.User;
 import pet.project.Messenger.repository.ContactsRepository;
 import pet.project.Messenger.repository.UserRepository;
+import pet.project.Messenger.model.PrimeryKeyses.ContactsPK;
 
 @Repository
 public class ContactsService {
@@ -40,5 +41,9 @@ public class ContactsService {
 	
 	public void addContact(long userId, long contactId) {
 		contactsRepository.save(new Contacts(userId, contactId, new Date()));
+	}
+	
+	public void deleteContact(long userId, long contactId) {
+		contactsRepository.delete(new Contacts(userId, contactId,new Date()));
 	}
 }
