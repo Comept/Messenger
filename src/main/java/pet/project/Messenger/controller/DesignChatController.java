@@ -1,6 +1,9 @@
 package pet.project.Messenger.controller;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 
@@ -17,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import lombok.extern.slf4j.Slf4j;
 import pet.project.Messenger.dto.ChatDto;
+import pet.project.Messenger.dto.ChatParticipantsDto;
 import pet.project.Messenger.dto.ContactDto;
 import pet.project.Messenger.dto.CreatChatDto;
 import pet.project.Messenger.dto.MessageDto;
@@ -75,12 +79,29 @@ public class DesignChatController {
 	public String viewChatPage(Model model, @PathVariable("id") Long chatId, @AuthenticationPrincipal User user) {
 		try{	
 			chatParticipantsService.isUserMemberOfChat(user.getUserId(), chatId);
+			ChatDto chatDto = new ChatDto();
+			
+			//надо  впихнуть куда-нибудь
+			//------------------------------
+			List<ChatParticipantsDto> chatParticipants = 
+					chatParticipantsService.getChatMembers(chatId).stream().map(participant -> new ChatParticipantsDto(participant)).toList();	
+			HashMap<Long, String> usernames = userService.getUsernamesOfUsersById(chatParticipants.stream().map(participant -> participant.getUserId()).toList());
+			Iterator<ChatParticipantsDto> participantIter = chatParticipants.iterator();
+			while(participantIter.hasNext()) {
+				ChatParticipantsDto participant = participantIter.next();
+				participant.setUsername(usernames.get(participant.getUserId()));
+			}
+			//-------------------------------
+			
+			chatDto.setMembers(chatParticipants);
+			
+			chatDto.setMessages(messagesService.getMessagesByChatId(chatId));
+			
+			chatDto.setChatName(chatService.getChatNameByChatId(chatId));
+
 			model.addAttribute("userId", user.getUserId());
 			model.addAttribute("chatId", chatId);
-			model.addAttribute("usernames", userService.getUsernamesOfUsersById(chatParticipantsService.getChatMembers(chatId)));
-			model.addAttribute("usersRole", chatParticipantsService.getMembersRole(chatId, chatParticipantsService.getChatMembers(chatId)));
-			model.addAttribute("messages", messagesService.getMessagesByChatId(chatId));
-			model.addAttribute("chatName", chatService.getChatNameByChatId(chatId));
+			model.addAttribute("chatDto", chatDto);
 			model.addAttribute("messageDto", new MessageDto());
 		}
 		catch(Exception ex){

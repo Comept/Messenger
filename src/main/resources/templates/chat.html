@@ -110,13 +110,13 @@
         <h2>Чат</h2>
     </div>
 	<div class="chat-messages" id="chat-messages">
-		<div th:each="message : ${messages}">
+		<div th:each="message : ${chatDto.messages}">
 			<div th:unless="${message.senderId == userId}" class="message other-message">
-				<div class="sender-name"><label th:text="${usernames[message.senderId]}"></div>
+				<div class="sender-name"><label th:text="${chatDto.getParticipantUsernameById(message.senderId)}"></div>
 				<div class="message-text"><label th:text="${message.messageText}"></label></div>
 			</div>
 			<div th:if="${message.senderId == userId}" class="message user-message">
-				<div class="sender-name"><label th:text="${usernames[message.senderId]}"></div>
+				<div class="sender-name"><label th:text="${chatDto.getParticipantUsernameById(message.senderId)}"></div>
 				<div class="message-text"><label th:text="${message.messageText}"></label></div>
 			</div>
 		</div>

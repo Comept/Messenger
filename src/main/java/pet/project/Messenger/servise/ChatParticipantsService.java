@@ -22,13 +22,13 @@ public class ChatParticipantsService {
 	}
 
 	public boolean isUserMemberOfChat(long userId, long chatId) throws AccessDeniedException{
-		if (chatParticipantsRepository.findByChatIdAndUserId(userId, chatId) == null)
+		if (chatParticipantsRepository.findByChatIdAndUserId(chatId, userId) == null)
 			throw new AccessDeniedException("У пользователья " + userId + " нет прав доступа к чату " + chatId);
 		else return true;
 	}
 	
-	public List<Long> getChatMembers(long chatId){
-		return chatParticipantsRepository.findByChatId(chatId).stream().map(participant -> participant.getUserId()).toList();
+	public List<ChatParticipants> getChatMembers(long chatId){
+		return chatParticipantsRepository.findByChatId(chatId);
 	}
 	
 	public HashMap<Long, String> getMembersRole(long chatId, List<Long> userIds){
