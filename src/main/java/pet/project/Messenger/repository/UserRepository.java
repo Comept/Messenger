@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import pet.project.Messenger.model.User;
 
 @Repository
-public interface UserRepository extends JpaRepository<User,Integer>{
+public interface UserRepository extends JpaRepository<User,Long>{
 	public User findByUsername(String username);
 	public User findByEmail(String email);
 	public List <User> findByIdIsIn(Collection<Long> usersId);

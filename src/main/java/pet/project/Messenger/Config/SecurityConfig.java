@@ -39,7 +39,7 @@ public class SecurityConfig {
 	
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-	http.authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests.requestMatchers("/login", "/register").permitAll()
+	http.authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests.requestMatchers("/login", "/register", "/api/", "/api/**").permitAll()
             .anyRequest().authenticated())
 		.formLogin((formLogin) -> formLogin.loginPage("/login").defaultSuccessUrl("/chats").usernameParameter("email").passwordParameter("password").permitAll())
 		.logout((logout) -> logout.logoutUrl("/logout").logoutSuccessUrl("/login").invalidateHttpSession(true).deleteCookies("JSESSIONID").permitAll());

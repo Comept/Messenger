@@ -10,9 +10,22 @@ import pet.project.Messenger.model.User;
 
 public class ChatDto {
 
+	private long userId;
 	private List<ChatParticipantsDto> members = new ArrayList();
 	private List<Messages> messages; 
 	private String chatName;
+
+	
+	
+	public long getUserId() {
+		return userId;
+	}
+
+
+	public void setUserId(long userId) {
+		this.userId = userId;
+	}
+
 
 	public List<ChatParticipantsDto> getMembers() {
 		return members;

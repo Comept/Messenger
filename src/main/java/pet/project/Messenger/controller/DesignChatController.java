@@ -42,15 +42,14 @@ public class DesignChatController {
 	private final ChatService chatService;
 	private final ChatParticipantsService chatParticipantsService;
 	private final MessagesService messagesService;
-	private final UserService userService;
+	
 	public DesignChatController(ContactsService contactsService, ChatService chatService, 
-			ChatParticipantsService chatParticipantsService, MessagesService messagesService, UserService userService) {
+			ChatParticipantsService chatParticipantsService, MessagesService messagesService) {
 		super();
 		this.contactsService = contactsService;
 		this.chatService = chatService;
 		this.chatParticipantsService = chatParticipantsService;
 		this.messagesService = messagesService;
-		this.userService = userService;
 	}
 	@GetMapping 
 	public String viewMessengerPage(Model model,  @AuthenticationPrincipal User user) {
@@ -81,33 +80,24 @@ public class DesignChatController {
 			chatParticipantsService.isUserMemberOfChat(user.getUserId(), chatId);
 			ChatDto chatDto = new ChatDto();
 			
-			//надо  впихнуть куда-нибудь
-			//------------------------------
-			List<ChatParticipantsDto> chatParticipants = 
-					chatParticipantsService.getChatMembers(chatId).stream().map(participant -> new ChatParticipantsDto(participant)).toList();	
-			HashMap<Long, String> usernames = userService.getUsernamesOfUsersById(chatParticipants.stream().map(participant -> participant.getUserId()).toList());
-			Iterator<ChatParticipantsDto> participantIter = chatParticipants.iterator();
-			while(participantIter.hasNext()) {
-				ChatParticipantsDto participant = participantIter.next();
-				participant.setUsername(usernames.get(participant.getUserId()));
-			}
-			//-------------------------------
-			
-			chatDto.setMembers(chatParticipants);
+			chatDto.setMembers(chatParticipantsService.getChatParticipants(chatId));
 			
 			chatDto.setMessages(messagesService.getMessagesByChatId(chatId));
 			
 			chatDto.setChatName(chatService.getChatNameByChatId(chatId));
 
-			model.addAttribute("userId", user.getUserId());
+			chatDto.setUserId(user.getUserId());
+			
 			model.addAttribute("chatId", chatId);
 			model.addAttribute("chatDto", chatDto);
 			model.addAttribute("messageDto", new MessageDto());
+			return "chat.html"; 
 		}
 		catch(Exception ex){
 				System.out.println(ex);
+				return "redirect:/chats";
 		}
-		return "chat.html"; 
+		
 	}
 	@PostMapping("/{id}")
 	public String saveMessage(Model model, @PathVariable("id") Long chatId, @AuthenticationPrincipal User user, @ModelAttribute("messageDto") MessageDto message) {

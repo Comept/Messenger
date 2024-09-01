@@ -111,11 +111,11 @@
     </div>
 	<div class="chat-messages" id="chat-messages">
 		<div th:each="message : ${chatDto.messages}">
-			<div th:unless="${message.senderId == userId}" class="message other-message">
+			<div th:unless="${message.senderId == chatDto.userId}" class="message other-message">
 				<div class="sender-name"><label th:text="${chatDto.getParticipantUsernameById(message.senderId)}"></div>
 				<div class="message-text"><label th:text="${message.messageText}"></label></div>
 			</div>
-			<div th:if="${message.senderId == userId}" class="message user-message">
+			<div th:if="${message.senderId == chatDto.userId}" class="message user-message">
 				<div class="sender-name"><label th:text="${chatDto.getParticipantUsernameById(message.senderId)}"></div>
 				<div class="message-text"><label th:text="${message.messageText}"></label></div>
 			</div>

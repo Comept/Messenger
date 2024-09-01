@@ -4,6 +4,7 @@ package pet.project.Messenger.servise;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Repository;
 
 import pet.project.Messenger.model.Messages;
@@ -21,6 +22,10 @@ public class MessagesService {
 	
 	public List<Messages> getMessagesByChatId(long chatId) {
 		return messagesRepository.findByChatId(chatId).stream().toList();
+	}
+	
+	public List<Messages> getMessagesByChatId(long chatId, PageRequest page) {
+		return messagesRepository.findByChatId(chatId, page).stream().toList();
 	}
 	
 	public void saveMessage(long chatId, long senderId, String messageText) {

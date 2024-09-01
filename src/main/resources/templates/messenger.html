@@ -116,7 +116,9 @@
 			<a href="/contact/contacts">
             <li>Контакты</li>
 			</a>
-            <li>Профиль</li>
+			<a th:href="@{/logout}">
+            <li>Выйти</li>
+			</a>
         </ul>
     </div>
 	<div class="add-chat-container">
@@ -133,7 +135,6 @@
 			 </a>
         </ul>
     </div>
-	<p>Click <a th:href="@{/logout}">here</a> to logout.</p>
     <script>
         const menuBtn = document.getElementById('menu-btn');
         const closeBtn = document.getElementById('close-btn');
