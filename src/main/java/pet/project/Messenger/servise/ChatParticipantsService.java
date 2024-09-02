@@ -31,10 +31,6 @@ public class ChatParticipantsService {
 		else return true;
 	}
 	
-	public List<ChatParticipants> getChatMembers(long chatId){
-		return chatParticipantsRepository.findByChatId(chatId);
-	}
-	
 	public HashMap<Long, String> getMembersRole(long chatId, List<Long> userIds){
 		HashMap<Long, String> result = new HashMap<Long, String> ();
 		Iterator<ChatParticipants> iterUser =  chatParticipantsRepository.findByChatIdAndUserIdIn(chatId, userIds).iterator();
@@ -47,7 +43,7 @@ public class ChatParticipantsService {
 	
 	public List<ChatParticipantsDto> getChatParticipants(long chatId){
 		List<ChatParticipantsDto> chatParticipants = 
-				getChatMembers(chatId).stream().map(participant -> new ChatParticipantsDto(participant)).toList();	
+				chatParticipantsRepository.findByChatId(chatId).stream().map(participant -> new ChatParticipantsDto(participant)).toList();	
 		HashMap<Long, String> usernames = new HashMap<Long, String> ();
 		Iterator<User> iterUser = userRepository.findAllById(chatParticipants.stream().map(participant -> participant.getUserId()).toList()).iterator();
 		while(iterUser.hasNext()) {
