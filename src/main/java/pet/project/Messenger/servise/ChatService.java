@@ -8,10 +8,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Repository;
 
 import pet.project.Messenger.dto.ChatDto;
+import pet.project.Messenger.dto.ChatListDto;
 import pet.project.Messenger.dto.CreatChatDto;
 import pet.project.Messenger.model.ChatParticipants;
 import pet.project.Messenger.model.Chats;
-import pet.project.Messenger.model.Messages;
 import pet.project.Messenger.model.User;
 import pet.project.Messenger.repository.ChatParticipantsRepository;
 import pet.project.Messenger.repository.ChatsRepository;
@@ -44,9 +44,8 @@ public class ChatService {
 			chatParticipantsRepository.save(new ChatParticipants(chat.getId(), userId, "members", new Date()));
 		}
 	}
-	public List<Chats> getUserChats(long userId) {
-		List<ChatParticipants> userChats = chatParticipantsRepository.findChatIsByUserId(userId);
-		return chatsRepository.findByIdIn(userChats.stream().map(r->r.getChatId()).toList());
+	public List<ChatListDto> getUserChats(long userId) {
+		return chatsRepository.findChatListByUserId(userId);
 	}
 	
 	public String getChatNameByChatId(long chatId) {

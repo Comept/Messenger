@@ -5,14 +5,13 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
-import pet.project.Messenger.model.Messages;
-import pet.project.Messenger.model.User;
+import pet.project.Messenger.model.Message;
 
 public class ChatDto {
 
 	private long userId;
 	private List<ChatParticipantsDto> members = new ArrayList();
-	private List<Messages> messages; 
+	private List<Message> messages; 
 	private String chatName;
 
 	
@@ -36,12 +35,12 @@ public class ChatDto {
 		this.members = members;
 	}
 
-	public List<Messages> getMessages() {
+	public List<Message> getMessages() {
 		return messages;
 	}
 
 
-	public void setMessages(List<Messages> messages) {
+	public void setMessages(List<Message> messages) {
 		this.messages = messages;
 	}
 

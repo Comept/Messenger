@@ -1,4 +1,4 @@
-package pet.project.Messenger.Config;
+package pet.project.Messenger.config;
 
 import java.util.ArrayList;
 import java.util.Arrays;

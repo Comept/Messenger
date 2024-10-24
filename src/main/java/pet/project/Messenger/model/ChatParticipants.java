@@ -3,24 +3,33 @@ package pet.project.Messenger.model;
 import java.io.Serializable;
 import java.util.Date;
 
+import jakarta.persistence.Basic;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.IdClass;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import pet.project.Messenger.model.PrimeryKeyses.ChatPartricipantsPK;
 
 @Entity
-@IdClass(ChatPartricipantsPK.class)
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class ChatParticipants implements Serializable{
 	@Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(unique=true, nullable = false)
+	private long id;
 	private long chatId;
-	@Id
     private long userId;
     private String role;
     private Date joinedAt;
-
-    public ChatParticipants() {
-    }
 
     public ChatParticipants(long chatId, long userId, String role, Date joinedAt) {
         setChatId(chatId);

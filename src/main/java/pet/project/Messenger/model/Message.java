@@ -11,7 +11,7 @@ import jakarta.persistence.Id;
 
 
 @Entity
-public class Messages {
+public class Message {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
@@ -22,17 +22,17 @@ public class Messages {
     private String messageText;
     private Date sentAt;
 
-    public Messages() {
+    public Message() {
     }
 
-    public Messages(long chatId, long senderId, String messageText, Date sentAt) {
+    public Message(long chatId, long senderId, String messageText, Date sentAt) {
         setChatId(chatId);
         setSenderId(senderId);
         setMessageText(messageText);
         setSentAt(sentAt);
     }
 
-    public Messages(long chatId, long senderId, String messageText) {
+    public Message(long chatId, long senderId, String messageText) {
         setChatId(chatId);
         setSenderId(senderId);
         setMessageText(messageText);

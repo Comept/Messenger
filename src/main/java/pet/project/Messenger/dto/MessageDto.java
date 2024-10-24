@@ -1,24 +1,18 @@
 package pet.project.Messenger.dto;
 
+import java.util.Date;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class MessageDto {
-	private String message;
-
-	public String getMessage() {
-		return message;
-	}
-
-	public void setMessage(String message) {
-		this.message = message;
-	}
-
-	public MessageDto() {
-		super();
-	}
-
-	public MessageDto(String message) {
-		super();
-		this.message = message;
-	}
-	
-	
+	private String username;
+	private long senderId;
+    private String messageText;
+    private Date sentAt;
+    
 }

@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Добавить в контакты</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .contacts-container {
+            background-color: #ffffff;
+            width: 100%;
+            max-width: 600px;
+            height: 80vh;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+        }
+
+        .contacts-header {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .contacts-list {
+            flex-grow: 1;
+            overflow-y: auto;
+            margin-bottom: 20px;
+        }
+
+        .contact {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .contact-name {
+            font-size: 18px;
+        }
+
+        .contact-actions button {
+            padding: 5px 10px;
+            margin-left: 10px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+
+        .contact-actions button.remove {
+            background-color: #e74c3c;
+        }
+
+        .contact-actions button:hover {
+            background-color: #2980b9;
+        }
+
+        .contact-actions button.remove:hover {
+            background-color: #c0392b;
+        }
+
+        .search-bar {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .search-bar input[type="text"] {
+            padding: 10px;
+            width: 80%;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 20px;
+        }
+
+        .search-bar button {
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            background-color: #3498db;
+            color: white;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+
+        .search-bar button:hover {
+            background-color: #2980b9;
+        }
+    </style>
+</head>
+<body>
+
+<div class="contacts-container">
+    <div class="contacts-header">Ваши контакты</div>
+
+    <!-- Секция с уже добавленными контактами -->
+    <div class="contacts-list">
+        <div th:if="${knownContacts.size() == 0}">
+            <p>У вас нет добавленных контактов.</p>
+        </div>
+        <div th:each="contact : ${knownContacts}" class="contact">
+            <div class="contact-name" th:text="${contact.username}">Имя пользователя</div>
+            <div class="contact-actions">
+                <form th:action="@{/contact/removeContact}" method="post">
+                    <input type="hidden" th:value="${contact.id}" name="contactId"/>
+                    <button type="submit" class="remove">Удалить</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="contacts-header">Добавить в контакты</div>
+
+    <!-- Форма поиска -->
+    <div class="search-bar">
+        <form th:action="@{/contact/contacts}" method="get">
+            <input type="text" name="search" placeholder="Введите имя для поиска" th:value="${search}">
+            <button type="submit">Поиск</button>
+        </form>
+    </div>
+
+    <!-- Секция для добавления новых контактов -->
+    <div class="contacts-list">
+        <div th:if="${users.size() == 0}">
+            <p>Ничего не найдено.</p>
+        </div>
+        <div th:each="user : ${users}" class="contact">
+            <div class="contact-name" th:text="${user.username}">Имя пользователя</div>
+            <div class="contact-actions">
+                <form th:action="@{/contact/addContact}" method="post">
+                    <input type="hidden" th:value="${user.id}" name="contactId"/>
+                    <button type="submit">Добавить</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
