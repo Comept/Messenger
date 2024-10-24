@@ -53,8 +53,8 @@ public class DesignChatController {
 	}
 	@GetMapping 
 	public String viewMessengerPage(Model model,  @AuthenticationPrincipal User user) {
-		
-		model.addAttribute("chatList", chatService.getUserChats(16L));
+		System.out.println(chatService.getUserChats(user.getUserId()));
+		model.addAttribute("chatList", chatService.getUserChats(user.getUserId()));
 		return "chat-list.html"; 
 	}
 	
@@ -102,7 +102,7 @@ public class DesignChatController {
 	public String saveMessage(Model model, @PathVariable("id") Long chatId, @AuthenticationPrincipal User user, @ModelAttribute("messageDto") MessageDto message) {
 		try{
 			chatParticipantsService.isUserMemberOfChat(user.getUserId(), chatId);
-			//messagesService.saveMessage( chatId, user.getUserId(), message.getMessage());
+			messagesService.saveMessage( chatId, user.getUserId(), message.getMessageText());
 		}
 		catch(Exception ex){
 				System.out.println(ex);

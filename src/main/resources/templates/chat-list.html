@@ -12,16 +12,18 @@
         <div class="nav">
             <button class="nav-button active">Чаты</button>
             <button id="contact-button" class="nav-button">Контакты</button>
-            <!-- Кнопка для создания нового чата -->
             <button id="create-chat-button" class="nav-button">Создать чат</button>
+			<button id="logout-button" class="nav-button">Выйти</button>
         </div>
     </div>
 
     <div class="chat-list">
         <div class="chat-item">
             <div class="chat-info" th:each="chat : ${chatList}">
+				<a th:href="@{/chats/} + ${chat.lastMessage.id}">
                 <span class="chat-name" th:text="${chat.chatName}">Название чата</span>
                 <span class="chat-description" th:text="${chat.lastMessage.messageText}"></span>
+				</a>
             </div>
         </div>
     </div>
@@ -33,6 +35,9 @@
         });
 		document.getElementById('contact-button').addEventListener('click', function() {
 		            window.location = "/contact/contacts";
+		        });
+		document.getElementById('logout-button').addEventListener('click', function() {
+		            window.location = "/logout";
 		        });
     </script>
 </body>

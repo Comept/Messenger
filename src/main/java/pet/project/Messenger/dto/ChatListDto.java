@@ -9,11 +9,11 @@ public class ChatListDto {
 	private String chatName;
 	private MessageDto lastMessage;
 	
-	public ChatListDto(String chatName, String username, long senderId, 
+	public ChatListDto(String chatName, long chatId, String username, long senderId, 
 			String messageText, Date sentAt) {
 		super();
 		this.chatName = chatName;
-		this.lastMessage = new MessageDto(username, senderId, messageText, sentAt);
+		this.lastMessage = new MessageDto(chatId, username, senderId, messageText, sentAt);
 	}
 	
 }

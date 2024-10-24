@@ -124,7 +124,7 @@
     <div class="chat-input-container">
         <div class="chat-input">
 			<form th:action="@{/chats/} + ${chatId}" th:object="${messageDto}" th:method="POST">
-	            <input value="wefwefwef" th:field="*{message}" name="message"  type="text" id="message-input" placeholder="Введите сообщение...">
+	            <input th:field="*{messageText}" name="message"  type="text" id="message-input" placeholder="Введите сообщение...">
 	            <button type="submit" id="send-button">Отправить</button>
 			</form>
         </div>
