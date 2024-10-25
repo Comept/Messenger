@@ -7,7 +7,7 @@ import org.springframework.data.repository.CrudRepository;
 import pet.project.Messenger.model.ChatParticipants;
 import pet.project.Messenger.model.PrimeryKeyses.ChatPartricipantsPK;
 
-public interface ChatParticipantsRepository extends CrudRepository<ChatParticipants,ChatPartricipantsPK>{
+public interface ChatParticipantsRepository extends CrudRepository<ChatParticipants,Long>{
 	public ChatParticipants findByChatIdAndUserId(long userId, long chatId);
 	public List<ChatParticipants> findChatIsByUserId(long userId);
 	public List<ChatParticipants> findByChatId(long chatId);

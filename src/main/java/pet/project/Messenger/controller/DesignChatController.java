@@ -53,7 +53,6 @@ public class DesignChatController {
 	}
 	@GetMapping 
 	public String viewMessengerPage(Model model,  @AuthenticationPrincipal User user) {
-		System.out.println(chatService.getUserChats(user.getUserId()));
 		model.addAttribute("chatList", chatService.getUserChats(user.getUserId()));
 		return "chat-list.html"; 
 	}
@@ -68,7 +67,6 @@ public class DesignChatController {
 	
 	@PostMapping("/create-chat")
 	public String creatChatPostResponse(Model model, @AuthenticationPrincipal User user, @ModelAttribute("contactsForm") CreatChatDto contactsForm) {
-		System.out.println(contactsForm.getContacts().get(0));
 		chatService.createChat(contactsForm);
 		return "redirect:/chats";
 	}
@@ -77,19 +75,8 @@ public class DesignChatController {
 	public String viewChatPage(Model model, @PathVariable("id") Long chatId, @AuthenticationPrincipal User user) {
 		try{	
 			chatParticipantsService.isUserMemberOfChat(user.getUserId(), chatId);
-			ChatDto chatDto = new ChatDto();
-			
-			chatDto.setMembers(chatParticipantsService.getChatParticipants(chatId));
-			
-			chatDto.setMessages(messagesService.getMessagesByChatId(chatId));
-			
-			chatDto.setChatName(chatService.getChatNameByChatId(chatId));
-
-			chatDto.setUserId(user.getUserId());
-			
+			model.addAttribute("userId", user.getId());
 			model.addAttribute("chatId", chatId);
-			model.addAttribute("chatDto", chatDto);
-			model.addAttribute("messageDto", new MessageDto());
 			return "chat.html"; 
 		}
 		catch(Exception ex){
@@ -97,17 +84,5 @@ public class DesignChatController {
 				return "redirect:/chats";
 		}
 		
-	}
-	@PostMapping("/{id}")
-	public String saveMessage(Model model, @PathVariable("id") Long chatId, @AuthenticationPrincipal User user, @ModelAttribute("messageDto") MessageDto message) {
-		try{
-			chatParticipantsService.isUserMemberOfChat(user.getUserId(), chatId);
-			messagesService.saveMessage( chatId, user.getUserId(), message.getMessageText());
-		}
-		catch(Exception ex){
-				System.out.println(ex);
-		}
-		return "redirect:/chats/" + chatId; 
-	}
-	
+	}	
 }

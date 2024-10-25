@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Repository;
 
+import pet.project.Messenger.dto.MessageDto;
 import pet.project.Messenger.model.Message;
 import pet.project.Messenger.repository.MessagesRepository;
 
@@ -20,15 +21,13 @@ public class MessagesService {
 		this.messagesRepository = messagesRepository;
 	}
 	
-	public List<Message> getMessagesByChatId(long chatId) {
-		return messagesRepository.findByChatId(chatId).stream().toList();
+	public List<MessageDto> getMessagesByChatId(long chatId) {
+		return messagesRepository.findListMessagesByChatId(chatId);
 	}
 	
-	public List<Message> getMessagesByChatId(long chatId, PageRequest page) {
-		return messagesRepository.findByChatId(chatId, page).stream().toList();
-	}
-	
-	public void saveMessage(long chatId, long senderId, String messageText) {
-		messagesRepository.save(new Message(chatId, senderId, messageText, new Date()));
+	public Message saveMessage(long chatId, long senderId, String messageText) {
+		Message message = new Message(chatId, senderId, messageText, new Date());
+		messagesRepository.save(message);
+		return message;
 	}
 }

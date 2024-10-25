@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="_csrf" th:content="${_csrf.token}"/>
+	<meta name="_csrf_header" th:content="${_csrf.headerName}"/>
     <title>Чат</title>
     <style>
         body {
@@ -109,24 +111,13 @@
     <div class="chat-header">
         <h2>Чат</h2>
     </div>
-	<div class="chat-messages" id="chat-messages">
-		<div th:each="message : ${chatDto.messages}">
-			<div th:unless="${message.senderId == chatDto.userId}" class="message other-message">
-				<div class="sender-name"><label th:text="${chatDto.getParticipantUsernameById(message.senderId)}"></div>
-				<div class="message-text"><label th:text="${message.messageText}"></label></div>
-			</div>
-			<div th:if="${message.senderId == chatDto.userId}" class="message user-message">
-				<div class="sender-name"><label th:text="${chatDto.getParticipantUsernameById(message.senderId)}"></div>
-				<div class="message-text"><label th:text="${message.messageText}"></label></div>
-			</div>
-		</div>
-	</div>
+    <div class="chat-messages" id="chat-messages">
+        <!-- Здесь будут динамически добавляться сообщения -->
+    </div>
     <div class="chat-input-container">
         <div class="chat-input">
-			<form th:action="@{/chats/} + ${chatId}" th:object="${messageDto}" th:method="POST">
-	            <input th:field="*{messageText}" name="message"  type="text" id="message-input" placeholder="Введите сообщение...">
-	            <button type="submit" id="send-button">Отправить</button>
-			</form>
+            <input type="text" id="message-input" placeholder="Введите сообщение...">
+            <button id="send-button">Отправить</button>
         </div>
     </div>
 </div>
@@ -135,43 +126,83 @@
     const chatMessages = document.getElementById('chat-messages');
     const messageInput = document.getElementById('message-input');
     const sendButton = document.getElementById('send-button');
-	const menuBtn = document.getElementById('menu-btn');
-	const closeBtn = document.getElementById('close-btn');
-	const sidebar = document.getElementById('sidebar');
-	const mainContent = document.getElementById('main-content');
+	const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+	const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
 
-	menuBtn.addEventListener('click', () => {
-	    sidebar.classList.toggle('open');
-	    mainContent.classList.toggle('shifted');
-		menuBtn.classList.add('hidden');
-	});
-
-	closeBtn.addEventListener('click', () => {
-	    sidebar.classList.remove('open');
-	    mainContent.classList.remove('shifted');
-		menuBtn.classList.remove('hidden');
-	});
-    sendButton.addEventListener('click', function() {
-        const messageText = messageInput.value.trim();
-
-        if (messageText !== '') {
-            const messageElement = document.createElement('div');
-            messageElement.classList.add('message', 'user-message');
-
-            const senderNameElement = document.createElement('div');
-            senderNameElement.classList.add('sender-name');
-            senderNameElement.textContent = 'Вы';
-
-            const messageTextElement = document.createElement('div');
-            messageTextElement.classList.add('message-text');
-            messageTextElement.textContent = messageText;
-
-            messageElement.appendChild(senderNameElement);
-            messageElement.appendChild(messageTextElement);
-            chatMessages.appendChild(messageElement);
-            chatMessages.scrollTop = chatMessages.scrollHeight;
+    // Функция для добавления сообщений в чат
+    function addMessage(senderName, messageText, isUserMessage) {
+        const messageElement = document.createElement('div');
+        messageElement.classList.add('message');
+        if (isUserMessage) {
+            messageElement.classList.add('user-message');
         }
-    });
+
+        const senderNameElement = document.createElement('div');
+        senderNameElement.classList.add('sender-name');
+        senderNameElement.textContent = senderName;
+
+        const messageTextElement = document.createElement('div');
+        messageTextElement.classList.add('message-text');
+        messageTextElement.textContent = messageText;
+
+        messageElement.appendChild(senderNameElement);
+        messageElement.appendChild(messageTextElement);
+        chatMessages.appendChild(messageElement);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    async function fetchNewMessages() {
+        try {
+            const response = await fetch(`/api/chats/[[${chatId}]]/messages`);
+            if (response.ok) {
+                const data = await response.json();
+                chatMessages.innerHTML = ''; 
+                data.forEach(message => {
+                    addMessage(message.senderName, message.messageText, [[${userId}]] == message.senderId);
+                });
+            } else {
+                console.error('Ошибка при получении сообщений:', response.statusText);
+            }
+        } catch (error) {
+            console.error('Ошибка при выполнении запроса:', error);
+        }
+    }
+
+	sendButton.addEventListener('click', async function() {
+	    const messageInput = document.getElementById('message-input');
+	    const text = messageInput.value.trim();  // Получаем текст из input и обрезаем лишние пробелы
+
+	    // Проверяем, что поле не пустое
+	    if (text === '') {
+	        alert('Введите сообщение');
+	        return;
+	    }
+	    try {
+	        const response = await fetch(`/api/chats/[[${chatId}]]/messagess`, {
+	            method: 'POST',
+	            headers: {
+	                'Content-Type': 'text/plain',
+					[csrfHeader]: csrfToken,
+	            },
+	            body: text
+	        });
+
+	        if (response.ok) {
+	            const savedMessage = await response.json();  // Получаем сохраненное сообщение
+	            console.log('Сообщение успешно отправлено:', savedMessage);
+	            messageInput.value = '';  // Очищаем поле ввода после отправки
+	        } else {
+	            console.error('Ошибка отправки сообщения:', response.statusText);
+	        }
+	    } catch (error) {
+	        console.error('Ошибка запроса:', error);
+	    }
+	});
+
+
+    setInterval(fetchNewMessages, 500);
+	
+    fetchNewMessages();
 </script>
 
 </body>

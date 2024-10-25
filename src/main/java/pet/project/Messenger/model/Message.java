@@ -1,6 +1,9 @@
 package pet.project.Messenger.model;
 
+import java.io.Serializable;
 import java.util.Date;
+
+import org.springframework.security.core.userdetails.UserDetails;
 
 import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
@@ -8,10 +11,12 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import lombok.Data;
 
 
 @Entity
-public class Message {
+@Data
+public class Message implements Serializable{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
