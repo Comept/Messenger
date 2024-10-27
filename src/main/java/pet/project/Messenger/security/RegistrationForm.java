@@ -1,6 +1,7 @@
 package pet.project.Messenger.security;
  
 import java.util.Date;
+import java.util.UUID;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -34,7 +35,7 @@ public class RegistrationForm {
 	
 	public User toUser(PasswordEncoder passwordEncoder) {
 		
-		return new User(username, passwordEncoder.encode(password), email, new Date());
+		return new User(UUID.randomUUID(),username, email, passwordEncoder.encode(password), new Date());
 	}
 	
 	

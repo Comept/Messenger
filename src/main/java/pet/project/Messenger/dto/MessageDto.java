@@ -1,6 +1,7 @@
 package pet.project.Messenger.dto;
 
 import java.util.Date;
+import java.util.UUID;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -11,9 +12,9 @@ import pet.project.Messenger.model.Message;
 @AllArgsConstructor
 @NoArgsConstructor
 public class MessageDto {
-	private long id;
+	private UUID id;
 	private String username;
-	private long senderId;
+	private UUID senderId;
     private String messageText;
     private Date sentAt;    
 }

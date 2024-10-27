@@ -3,6 +3,7 @@ package pet.project.Messenger.servise;
 
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Repository;
@@ -21,12 +22,12 @@ public class MessagesService {
 		this.messagesRepository = messagesRepository;
 	}
 	
-	public List<MessageDto> getMessagesByChatId(long chatId) {
+	public List<MessageDto> getMessagesByChatId(UUID chatId) {
 		return messagesRepository.findListMessagesByChatId(chatId);
 	}
 	
-	public Message saveMessage(long chatId, long senderId, String messageText) {
-		Message message = new Message(chatId, senderId, messageText, new Date());
+	public Message saveMessage(UUID chatId, UUID senderId, String messageText) {
+		Message message = new Message(UUID.randomUUID(), chatId, senderId, messageText, new Date());
 		messagesRepository.save(message);
 		return message;
 	}

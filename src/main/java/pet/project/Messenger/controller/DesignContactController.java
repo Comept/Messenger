@@ -45,13 +45,13 @@ public class DesignContactController {
 	    }
 	@PostMapping("/addContact")
 	public String addContact(@AuthenticationPrincipal User user, @RequestParam(value = "search", required = false) String search, @ModelAttribute("contactId") User newContact, Model model) {
-		contactsService.addContact(user.getUserId(), newContact.getId());
+		contactsService.addContact(user.getId(), newContact.getId());
 		return "redirect:/contact/contacts";
 	}
 	@PostMapping("/removeContact")
 	public String removeContact(@AuthenticationPrincipal User user, @RequestParam(value = "search", required = false) String search, @ModelAttribute("contactId") User removedContact, Model model) {
 		System.out.print(removedContact);
-		contactsService.deleteContact(user.getUserId(), removedContact.getId());
+		contactsService.deleteContact(user.getId(), removedContact.getId());
 		return "redirect:/contact/contacts";
 	}
 }

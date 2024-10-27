@@ -1,61 +1,27 @@
 package pet.project.Messenger.model;
 
+import java.util.UUID;
 
-
-import java.util.ArrayList;
-import java.util.List;
-
-import jakarta.persistence.CascadeType;
+import jakarta.persistence.Basic;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Chats {
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private long id;
-  private String chatName;
-  private boolean isGroup;
-
-    public Chats() {
-    }
-
-    public Chats(long id, String chatName, boolean isGroup) {
-        setId(id);
-        setChatName(chatName);
-        setIsGroup(isGroup);
-    }
-
-    public Chats(long id, String chatName) {
-		super();
-		this.id = id;
-		this.chatName = chatName;
-	}
-    
-	public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public String getChatName() {
-        return chatName;
-    }
-
-    public void setChatName(String chatName) {
-        this.chatName = chatName;
-    }
-
-    public boolean getIsGroup() {
-        return isGroup;
-    }
-
-    public void setIsGroup(boolean isGroup) {
-        this.isGroup = isGroup;
-    }
+	@Id
+	@Basic(optional = false)
+	@Column(unique=true, nullable = false)
+	@Builder.Default
+	private UUID id = UUID.randomUUID();
+	private String chatName;
+	private boolean isGroup;
 }

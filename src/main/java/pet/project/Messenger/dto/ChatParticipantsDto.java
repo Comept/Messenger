@@ -1,14 +1,20 @@
 package pet.project.Messenger.dto;
 
 import java.util.Date;
+import java.util.UUID;
 
-import jakarta.persistence.Id;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import pet.project.Messenger.model.ChatParticipants;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class ChatParticipantsDto{
 
 	private String username;
-    private long userId;
+    private UUID userId;
     private String role;
     private Date joinedAt;
 	public String getUsername() {
@@ -17,25 +23,8 @@ public class ChatParticipantsDto{
 	public void setUsername(String username) {
 		this.username = username;
 	}
-	public long getUserId() {
-		return userId;
-	}
-	public void setUserId(long userId) {
-		this.userId = userId;
-	}
-	public String getRole() {
-		return role;
-	}
-	public void setRole(String role) {
-		this.role = role;
-	}
-	public Date getJoinedAt() {
-		return joinedAt;
-	}
-	public void setJoinedAt(Date joinedAt) {
-		this.joinedAt = joinedAt;
-	}
-	public ChatParticipantsDto(long userId, String role, Date joinedAt) {
+	
+	public ChatParticipantsDto(UUID userId, String role, Date joinedAt) {
 		super();
 		this.userId = userId;
 		this.role = role;

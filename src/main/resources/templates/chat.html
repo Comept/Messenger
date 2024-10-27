@@ -158,7 +158,7 @@
                 const data = await response.json();
                 chatMessages.innerHTML = ''; 
                 data.forEach(message => {
-                    addMessage(message.senderName, message.messageText, [[${userId}]] == message.senderId);
+                    addMessage(message.senderName, message.messageText, `[[${userId}]]` == message.senderId);
                 });
             } else {
                 console.error('Ошибка при получении сообщений:', response.statusText);

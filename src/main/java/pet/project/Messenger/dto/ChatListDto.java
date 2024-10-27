@@ -1,6 +1,7 @@
 package pet.project.Messenger.dto;
 
 import java.util.Date;
+import java.util.UUID;
 
 import lombok.Data;
 
@@ -9,7 +10,7 @@ public class ChatListDto {
 	private String chatName;
 	private MessageDto lastMessage;
 	
-	public ChatListDto(String chatName, long chatId, String username, long senderId, 
+	public ChatListDto(String chatName, UUID chatId, String username, UUID senderId, 
 			String messageText, Date sentAt) {
 		super();
 		this.chatName = chatName;

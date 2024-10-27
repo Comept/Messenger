@@ -2,6 +2,7 @@ package pet.project.Messenger.servise;
 
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.stereotype.Repository;
 
@@ -10,7 +11,6 @@ import pet.project.Messenger.model.Contacts;
 import pet.project.Messenger.model.User;
 import pet.project.Messenger.repository.ContactsRepository;
 import pet.project.Messenger.repository.UserRepository;
-import pet.project.Messenger.model.PrimeryKeyses.ContactsPK;
 
 @Repository
 public class ContactsService {
@@ -23,27 +23,16 @@ public class ContactsService {
 		this.contactsRepository = contactsRepository;
 		this.userRepository = userRepository;
 	}
-	public List<ContactDto> findUserContacts(long user_id){
+	public List<ContactDto> findUserContacts(UUID user_id){
 		
-		List<Contacts> contacts = contactsRepository.findByUserId1OrUserId2(user_id,user_id);
-		
-		List <Long> usersId =  contacts.stream()
-				.map(contact -> {if(contact.getUserId1() == user_id) return contact.getUserId2();
-				else return contact.getUserId1(); } ).toList();
-		
-		List<User> contactsUser = userRepository.findByIdIsIn(usersId);
-		
-		List<ContactDto> contactsDto = contactsUser.stream()
-				.map(user -> new ContactDto(user.getUserId(), user.getUsername())).toList();
-		
-		return contactsDto;
+		return contactsRepository.findByUser1(user_id);
 	}
 	
-	public void addContact(long userId, long contactId) {
+	public void addContact(UUID userId, UUID contactId) {
 		contactsRepository.save(new Contacts(userId, contactId, new Date()));
 	}
 	
-	public void deleteContact(long userId, long contactId) {
+	public void deleteContact(UUID userId, UUID contactId) {
 		contactsRepository.delete(new Contacts(userId, contactId,new Date()));
 	}
 }

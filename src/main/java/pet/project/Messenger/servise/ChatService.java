@@ -2,6 +2,7 @@ package pet.project.Messenger.servise;
 
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -33,22 +34,23 @@ public class ChatService {
 	public void createChat(CreatChatDto creatChatDto) {
 		Chats chat = new Chats();
 		chat.setChatName(creatChatDto.getChatName());
-		chat.setIsGroup(creatChatDto.getContacts().size() > 1);
+		chat.setGroup(creatChatDto.getContacts().size() > 1);
 		chatsRepository.save(chat);
 		
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		User user = (User) authentication.getPrincipal();
 		
-		chatParticipantsRepository.save(new ChatParticipants(chat.getId(), user.getUserId(), "creater", new Date()));
-		for (long userId : creatChatDto.getContacts()) {
-			chatParticipantsRepository.save(new ChatParticipants(chat.getId(), userId, "members", new Date()));
+		chatParticipantsRepository.save(new ChatParticipants(UUID.randomUUID(), chat.getId(), 
+				user.getId(), "creater", new Date()));
+		for (UUID userId : creatChatDto.getContacts()) {
+			chatParticipantsRepository.save(new ChatParticipants(UUID.randomUUID(), chat.getId(), userId, "members", new Date()));
 		}
 	}
-	public List<ChatListDto> getUserChats(long userId) {
-		return chatsRepository.findChatListByUserId(userId);
+	public List<ChatListDto> getUserChats(UUID uuid) {
+		return chatsRepository.findChatListByUserId(uuid);
 	}
 	
-	public String getChatNameByChatId(long chatId) {
+	public String getChatNameByChatId(UUID chatId) {
 		return chatsRepository.findById(chatId).get().getChatName();
 	}
 }

@@ -2,6 +2,7 @@ package pet.project.Messenger.web.api;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -26,15 +27,15 @@ import pet.project.Messenger.servise.MessagesService;
 public class ChatController {
 	private final MessagesService messageService;
 	@GetMapping("{id}/messages")
-	public List<MessageDto> getChatMessages(@PathVariable("id") Long chatId){
+	public List<MessageDto> getChatMessages(@PathVariable("id") UUID chatId){
 		return messageService.getMessagesByChatId(chatId);
 	}
 	
 	@PostMapping(path = "{id}/messagess")
-	public Message saveMessage(@PathVariable("id") Long chatId,
+	public Message saveMessage(@PathVariable("id") UUID chatId,
             @RequestBody String text,
             @AuthenticationPrincipal User user){
 		System.out.println("sadasdsadasdsadsadsad");
-		return messageService.saveMessage( chatId, user.getUserId(), text);
+		return messageService.saveMessage( chatId, user.getId(), text);
 	}
 }

@@ -5,8 +5,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-
-
+import java.util.UUID;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -41,25 +40,23 @@ public class DesignChatController {
 	private final ContactsService contactsService;
 	private final ChatService chatService;
 	private final ChatParticipantsService chatParticipantsService;
-	private final MessagesService messagesService;
 	
 	public DesignChatController(ContactsService contactsService, ChatService chatService, 
-			ChatParticipantsService chatParticipantsService, MessagesService messagesService) {
+			ChatParticipantsService chatParticipantsService) {
 		super();
 		this.contactsService = contactsService;
 		this.chatService = chatService;
 		this.chatParticipantsService = chatParticipantsService;
-		this.messagesService = messagesService;
 	}
 	@GetMapping 
 	public String viewMessengerPage(Model model,  @AuthenticationPrincipal User user) {
-		model.addAttribute("chatList", chatService.getUserChats(user.getUserId()));
+		model.addAttribute("chatList", chatService.getUserChats(user.getId()));
 		return "chat-list.html"; 
 	}
 	
 	@GetMapping("/create-chat")
 	public String creatingChatGetResponse(Model model, @AuthenticationPrincipal User user) {
-		model.addAttribute("contacts", contactsService.findUserContacts(user.getUserId()));
+		model.addAttribute("contacts", contactsService.findUserContacts(user.getId()));
 		model.addAttribute("contactsForm", new CreatChatDto());
 		return "createNewChat.html";
 	}
@@ -72,9 +69,9 @@ public class DesignChatController {
 	}
 	
 	@GetMapping("/{id}")
-	public String viewChatPage(Model model, @PathVariable("id") Long chatId, @AuthenticationPrincipal User user) {
+	public String viewChatPage(Model model, @PathVariable("id") UUID chatId, @AuthenticationPrincipal User user) {
 		try{	
-			chatParticipantsService.isUserMemberOfChat(user.getUserId(), chatId);
+			chatParticipantsService.isUserMemberOfChat(user.getId(), chatId);
 			model.addAttribute("userId", user.getId());
 			model.addAttribute("chatId", chatId);
 			return "chat.html"; 

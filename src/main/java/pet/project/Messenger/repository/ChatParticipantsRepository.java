@@ -1,15 +1,15 @@
 package pet.project.Messenger.repository;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.data.repository.CrudRepository;
 
 import pet.project.Messenger.model.ChatParticipants;
-import pet.project.Messenger.model.PrimeryKeyses.ChatPartricipantsPK;
 
-public interface ChatParticipantsRepository extends CrudRepository<ChatParticipants,Long>{
-	public ChatParticipants findByChatIdAndUserId(long userId, long chatId);
-	public List<ChatParticipants> findChatIsByUserId(long userId);
-	public List<ChatParticipants> findByChatId(long chatId);
-	public List<ChatParticipants> findByChatIdAndUserIdIn(long chatId, List<Long> userId);
+public interface ChatParticipantsRepository extends CrudRepository<ChatParticipants,UUID>{
+	public ChatParticipants findByChatIdAndUserId(UUID chatId, UUID uuid);
+	public List<ChatParticipants> findChatIsByUserId(UUID userId);
+	public List<ChatParticipants> findByChatId(UUID chatId);
+	public List<ChatParticipants> findByChatIdAndUserIdIn(UUID chatId, List<UUID> userId);
 }

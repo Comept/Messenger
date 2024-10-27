@@ -2,40 +2,23 @@ package pet.project.Messenger.model.PrimeryKeyses;
 
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.UUID;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.Id;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import pet.project.Messenger.model.User;
 
-
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class ContactsPK implements Serializable{
-	private long userId1;
-	private long userId2;
-	public ContactsPK() {
-		super();
-	}
-	public long getUserId1() {
-		return userId1;
-	}
-	public void setUserId1(long userId1) {
-		this.userId1 = userId1;
-	}
-	public long getUserId2() {
-		return userId2;
-	}
-	public void setUserId2(long userId2) {
-		this.userId2 = userId2;
-	}
-	public ContactsPK(long userId1, long userId2) {
-		super();
-		this.userId1 = userId1;
-		this.userId2 = userId2;
-	}
-	@Override
-	public String toString() {
-		return "ContactsPK [userId1=" + userId1 + ", userId2=" + userId2 + "]";
-	}
+
+	private static final long serialVersionUID = 7176995156043847749L;
 	
-	
+	private UUID userId1;
+	private UUID userId2;
 }
