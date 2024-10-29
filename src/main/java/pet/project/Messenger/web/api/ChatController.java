@@ -1,7 +1,9 @@
 package pet.project.Messenger.web.api;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.http.ResponseEntity;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.context.request.async.DeferredResult;
 
 import lombok.RequiredArgsConstructor;
 import pet.project.Messenger.dto.MessageDto;
@@ -26,16 +29,28 @@ import pet.project.Messenger.servise.MessagesService;
 @RequiredArgsConstructor
 public class ChatController {
 	private final MessagesService messageService;
-	@GetMapping("{id}/messages")
-	public List<MessageDto> getChatMessages(@PathVariable("id") UUID chatId){
+    private final Map<UUID,List<DeferredResult<Message>>> clients = new HashMap<>();
+
+	@GetMapping("{id}/messages/all")
+	public List<MessageDto> getAllMessages(@PathVariable("id") UUID chatId){
+		
 		return messageService.getMessagesByChatId(chatId);
 	}
+	@GetMapping("{id}/messages")
+	public DeferredResult<Message> getChatMessage(@PathVariable("id") UUID chatId){
+		DeferredResult<Message> deferredResult = new DeferredResult<>();
+		if(!clients.containsKey(chatId)) clients.put(chatId,new ArrayList());
+		clients.get(chatId).add(deferredResult);
+		return deferredResult;
+	}
 	
-	@PostMapping(path = "{id}/messagess")
-	public Message saveMessage(@PathVariable("id") UUID chatId,
+	@PostMapping(path = "{id}/messages")
+	public void saveMessage(@PathVariable("id") UUID chatId,
             @RequestBody String text,
             @AuthenticationPrincipal User user){
-		System.out.println("sadasdsadasdsadsadsad");
-		return messageService.saveMessage( chatId, user.getId(), text);
+		Message message = messageService.saveMessage( chatId, user.getId(), text);
+		for(DeferredResult<Message> client: clients.get(chatId)) {
+			client.setResult(message);
+		}
 	}
 }
