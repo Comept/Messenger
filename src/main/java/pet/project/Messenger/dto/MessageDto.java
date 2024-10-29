@@ -12,9 +12,18 @@ import pet.project.Messenger.model.Message;
 @AllArgsConstructor
 @NoArgsConstructor
 public class MessageDto {
+	
 	private UUID id;
 	private String username;
 	private UUID senderId;
     private String messageText;
-    private Date sentAt;    
+    private Date sentAt;   
+    
+	public MessageDto(Message message) {
+		this.id = message.getId();
+		this.username = "Unknown Username";
+		this.senderId = message.getSenderId();
+		this.messageText = message.getMessageText();
+		this.sentAt = message.getSentAt();
+	}
 }

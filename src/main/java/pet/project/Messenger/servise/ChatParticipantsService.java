@@ -27,4 +27,8 @@ public class ChatParticipantsService {
 			throw new AccessDeniedException("У пользователья " + uuid + " нет прав доступа к чату " + chatId);
 		else return true;
 	}
+	
+	public void saveChatParticipants(ChatParticipants chatParticipants) {
+		chatParticipantsRepository.save(chatParticipants);
+	}
 }

@@ -8,6 +8,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Repository;
 
+import lombok.RequiredArgsConstructor;
 import pet.project.Messenger.dto.ChatDto;
 import pet.project.Messenger.dto.ChatListDto;
 import pet.project.Messenger.dto.CreatChatDto;
@@ -19,17 +20,11 @@ import pet.project.Messenger.repository.ChatsRepository;
 import pet.project.Messenger.repository.MessagesRepository;
 
 @Repository
+@RequiredArgsConstructor
 public class ChatService {
 
 	private final ChatsRepository chatsRepository;
-	private final ChatParticipantsRepository chatParticipantsRepository;
-	private final MessagesRepository messagesRepository;
-	public ChatService(ChatsRepository chatsRepository, ChatParticipantsRepository chatParticipantsRepository, MessagesRepository messagesRepository) {
-		super();
-		this.chatsRepository = chatsRepository;
-		this.chatParticipantsRepository = chatParticipantsRepository;
-		this.messagesRepository = messagesRepository;
-	}
+	private final ChatParticipantsService chatParticipantsService;
 
 	public void createChat(CreatChatDto creatChatDto) {
 		Chats chat = new Chats();
@@ -40,10 +35,11 @@ public class ChatService {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		User user = (User) authentication.getPrincipal();
 		
-		chatParticipantsRepository.save(new ChatParticipants(UUID.randomUUID(), chat.getId(), 
-				user.getId(), "creater", new Date()));
+		chatParticipantsService.saveChatParticipants(new ChatParticipants(UUID.randomUUID(), 
+				chat.getId(), user.getId(), "creater", new Date()));
 		for (UUID userId : creatChatDto.getContacts()) {
-			chatParticipantsRepository.save(new ChatParticipants(UUID.randomUUID(), chat.getId(), userId, "members", new Date()));
+			chatParticipantsService.saveChatParticipants(new ChatParticipants(UUID.randomUUID(), 
+					chat.getId(), userId, "members", new Date()));
 		}
 	}
 	public List<ChatListDto> getUserChats(UUID uuid) {
