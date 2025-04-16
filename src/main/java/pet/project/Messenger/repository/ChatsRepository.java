@@ -22,7 +22,6 @@ public interface ChatsRepository extends JpaRepository<Chats,UUID>{
 				"LEFT JOIN Chats c ON c.id = cp.id "+
 				"LEFT JOIN Message m ON m.chatId = c.id "+
 				"LEFT JOIN User u ON u.id = m.senderId "+
-				"ORDER BY m.sentAt DESC "+
-				"LIMIT 1")
+				"ORDER BY m.sentAt DESC ")
 	 public List<ChatListDto> findChatListByUserId(@Param("userId") UUID uuid);
 }

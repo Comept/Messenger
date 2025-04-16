@@ -3,182 +3,72 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Создание чата</title>
-    <style>
-        /* Основные стили */
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background-color: #f7f7f7;
-            flex-direction: column;
-        }
-
-        /* Стили шапки */
-        .header {
-            width: 100%;
-            background-color: #3498db;
-            padding: 10px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            color: white;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            margin-bottom: 20px;
-        }
-
-        .header .logo {
-            font-size: 1.5em;
-            font-weight: bold;
-        }
-
-        .nav {
-            display: flex;
-            gap: 10px;
-        }
-
-        .nav-button {
-            background-color: transparent;
-            border: none;
-            color: white;
-            cursor: pointer;
-            padding: 8px 15px;
-            font-size: 1em;
-            border-radius: 5px;
-            transition: background-color 0.3s;
-        }
-
-        .nav-button:hover, .nav-button.active {
-            background-color: rgba(255, 255, 255, 0.2);
-        }
-
-        /* Стили контейнера */
-        .container {
-            background-color: white;
-            padding: 40px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            width: 400px;
-        }
-
-        h2 {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        input[type="text"] {
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-sizing: border-box;
-        }
-
-        .search-container {
-            display: flex;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .search-container input[type="text"] {
-            flex-grow: 1;
-            margin-right: 10px;
-        }
-
-        .contacts {
-            margin: 20px 0;
-            max-height: 200px;
-            overflow-y: auto;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            padding: 10px;
-            box-sizing: border-box;
-        }
-
-        .contacts label {
-            display: block;
-            padding: 10px;
-            border-bottom: 1px solid #ddd;
-            cursor: pointer;
-        }
-
-        .contacts label:last-child {
-            border-bottom: none;
-        }
-
-        .contacts label:hover {
-            background-color: #f0f0f0;
-        }
-
-        .contacts input[type="checkbox"] {
-            margin-right: 10px;
-        }
-
-        button {
-            width: 100%;
-            padding: 10px;
-            background-color: #3498db;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-
-        button:hover {
-            background-color: #2980b9;
-        }
-    </style>
+    <title>Создать чат | Мессенджер</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+	<link rel="stylesheet" href="/css/styles.css">
+	<link rel="stylesheet" href="/css/header.css">
 </head>
 <body>
+	<header class="header">
+	    <div class="header-content">
+	        <div class="logo">Мессенджер</div>
+	        <div class="nav">
+	            <button onclick="window.location.href='/chats'" id="chats-button" class="nav-button"><i class="fas fa-comments"></i> Чаты</button>
+	            <button onclick="window.location.href='/contact/contacts'" id="contact-button" class="nav-button"><i class="fas fa-address-book"></i> Контакты</button>
+				<button onclick="window.location.href='/chats/create-chat'" id="create-chat-button" class="nav-button"><i class="fas fa-comment-medical"></i> Создать чат</button>
+				<button onclick="window.location.href='/logout'" id="logout-button" class="nav-button"><i class="fas fa-sign-out-alt"></i> Выйти</button>
+	        </div>
+	    </div>
+	</header>
 
-<div class="header">
-    <div class="logo">Logo</div>
-    <div class="nav">
-        <button class="nav-button" onclick="window.location.href='/chats'">Чаты</button>
-        <button class="nav-button" onclick="window.location.href='/contact/contacts'">Контакты</button>
-        <button class="nav-button active" onclick="window.location.href='/chats/create-chat'">Создать чат</button>
-        <button class="nav-button" onclick="window.location.href='/logout'">Выйти</button>
-    </div>
-</div>
-
-<div class="container">
-    <h2>Создать новый чат</h2>
-    <form th:action="@{/chats/create-chat}" th:object="${contactsForm}" method="post">
-        <input type="text" th:field="*{chatName}" id="chat-name" name="chatName" placeholder="Название чата">
-        <div class="search-container">
-            <input type="text" id="search-bar" placeholder="Поиск по никнейму">
-            <button type="button" id="search-btn">Поиск</button>
+    <main class="main-content">
+        <div class="card create-chat-container">
+            <h2 class="text-center">Создать новый чат</h2>
+            
+            <form th:action="@{/chats/create-chat}" th:object="${contactsForm}" method="post">
+                <div class="form-group">
+                    <label for="chat-name" class="form-label">Название чата:</label>
+                    <input type="text" th:field="*{chatName}" id="chat-name" name="chatName" class="form-control" placeholder="Введите название чата" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Выберите участников:</label>
+                    <div class="search-wrapper">
+                        <input type="text" id="search-bar" class="form-control" placeholder="Поиск по имени">
+                        <button type="button" id="search-btn" class="btn">Поиск</button>
+                    </div>
+                    
+                    <div class="contacts-list" id="contacts-list">
+                        <div th:if="${contacts.empty}" class="empty-contacts">
+                            Нет доступных контактов
+                        </div>
+                        
+                        <div th:each="contact : ${contacts}" class="contact-item">
+                            <input type="checkbox" th:value="${contact.id}" th:field="*{contacts}" id="contact-${contact.id}" class="contact-checkbox">
+                            <label for="contact-${contact.id}" class="contact-name" th:text="${contact.username}">Имя пользователя</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn btn-block">Создать чат</button>
+            </form>
         </div>
-        <div class="contacts" id="contacts-list">
-            <label th:each="contact : ${contacts}">
-                <input type="checkbox" th:value="${contact.id}" th:field="*{contacts}">
-                <span th:text="${contact.username}">User</span>
-            </label>
-        </div>
-        <button type="submit">Создать чат</button>
-    </form>
-</div>
+    </main>
 
-<script>
-    document.getElementById('search-btn').addEventListener('click', function() {
-        const searchQuery = document.getElementById('search-bar').value.toLowerCase();
-        const contacts = document.querySelectorAll('#contacts-list label');
-
-        contacts.forEach(contact => {
-            const username = contact.querySelector('span').textContent.toLowerCase();
-            if (username.includes(searchQuery)) {
-                contact.style.display = 'block';
-            } else {
-                contact.style.display = 'none';
-            }
+    <script>
+        document.getElementById('search-btn').addEventListener('click', function() {
+            const searchQuery = document.getElementById('search-bar').value.toLowerCase();
+            const contacts = document.querySelectorAll('.contact-item');
+            
+            contacts.forEach(contact => {
+                const username = contact.querySelector('.contact-name').textContent.toLowerCase();
+                if (username.includes(searchQuery)) {
+                    contact.style.display = 'flex';
+                } else {
+                    contact.style.display = 'none';
+                }
+            });
         });
-    });
-</script>
-
+    </script>
 </body>
 </html>
