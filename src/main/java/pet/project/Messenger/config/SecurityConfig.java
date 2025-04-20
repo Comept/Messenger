@@ -3,6 +3,7 @@ package pet.project.Messenger.config;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -31,18 +32,22 @@ public class SecurityConfig {
 	 @Bean
 	 public UserDetailsService userDetailsService(UserRepository userRepo) {
 	  return email -> {
-	    User user = userRepo.findByEmail(email);
-	    if (user != null) return user;
+	    System.out.println("Trying to authenticate with email: " + email); // 👈 добавь это
+		Optional<User> user = userRepo.findByEmail(email);
+	    if (!user.isEmpty()) 
+	    {
+	    	System.out.println(user.get().getId());
+	    	return user.get();};
 	    throw new UsernameNotFoundException("User ‘" + email + "’ not found");
 	  };
 	 }
 	
 	@Bean
-	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-	http.authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests.requestMatchers("/login", "/register").permitAll()
+	public SecurityFilterChain filterChain(HttpSecurity http, CustomAuthenticationSuccessHandler successHandler) throws Exception {
+	http.authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests.requestMatchers("/login","/auth/login", "/auth/register").permitAll()
             .anyRequest().authenticated())
-		.formLogin((formLogin) -> formLogin.loginPage("/login").usernameParameter("email").passwordParameter("password").permitAll().defaultSuccessUrl("/chats"))
-		.logout((logout) -> logout.logoutUrl("/logout").logoutSuccessUrl("/login").invalidateHttpSession(true).deleteCookies("JSESSIONID").permitAll());
+		.formLogin((formLogin) -> formLogin.loginPage("/auth/login").loginProcessingUrl("/login").usernameParameter("email").passwordParameter("password").successHandler(successHandler))
+		.logout((logout) -> logout.logoutUrl("/logout").logoutSuccessUrl("/auth/login").invalidateHttpSession(true).deleteCookies("JSESSIONID"));
 	return http.build();
 	}
 

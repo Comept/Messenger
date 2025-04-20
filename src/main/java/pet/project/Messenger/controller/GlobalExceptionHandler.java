@@ -1,14 +1,16 @@
 package pet.project.Messenger.controller;
 
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.NoHandlerFoundException;
+import pet.project.Messenger.exception.UserAlreadyExistsException;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
-    @ExceptionHandler(NoHandlerFoundException.class)
-    public ModelAndView handle404() {
-        return new ModelAndView("forward:/chats");
-    }
+
+	@ExceptionHandler(UserAlreadyExistsException.class)
+	public String handleUserExists(UserAlreadyExistsException ex, Model model) {
+		model.addAttribute("error", ex.getMessage());
+		return "profile/0";
+	}
 }

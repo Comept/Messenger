@@ -2,8 +2,23 @@ spring.application.name : Messenger
 server:
   port: 8081
 spring:
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: course 
+    redis:
+      host: localhost
+      port: 6379
+      database: 0
+  mail:
+    host: smtp.yandex.ru
+    port: 465
+    protocol: smtp
+    username: al.5alimov@yandex.ru
+    password: hqwhhvatptdjhjfk
   datasource:
-    url: jdbc:postgresql://localhost:5432/messenger
+    url: jdbc:postgresql://localhost:5432/course
     username: postgres
     password: postgres
   jpa:
@@ -11,6 +26,8 @@ spring:
     properties:
       hibernate:
         format_sql: true
+    hibernate:
+      ddl-auto: create-drop
   logging:
     level:
         hibernate:
